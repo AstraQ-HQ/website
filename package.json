@@ -2,19 +2,27 @@
   "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "payload:gen": "payload generate:types && payload generate:db-schema && payload generate:importmap"
   },
   "dependencies": {
+    "@payloadcms/db-sqlite": "^3.62.1",
+    "@payloadcms/next": "^3.62.1",
+    "@payloadcms/richtext-lexical": "^3.62.1",
+    "@t3-oss/env-nextjs": "^0.13.8",
     "lucide-react": "^0.552.0",
     "next": "16.0.1",
+    "payload": "^3.62.1",
     "react": "^19",
-    "react-dom": "^19"
+    "react-dom": "^19",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.4",

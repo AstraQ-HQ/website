@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { IconBadge } from "@/components/icon-badge";
+import { cn } from "@/lib/utils";
 
 export function DocumentationSection() {
   const [activeCard, setActiveCard] = useState(0);
@@ -71,14 +72,18 @@ export function DocumentationSection() {
                   type="button"
                   key={card.title}
                   onClick={() => handleCardClick(index)}
-                  className={`w-full overflow-hidden flex flex-col justify-start items-start transition-all duration-300 cursor-pointer text-left ${
+                  className={cn(
+                    "w-full overflow-hidden flex flex-col justify-start items-start transition-all duration-300 cursor-pointer text-left",
                     isActive
                       ? "bg-white shadow-[0px_0px_0px_0.75px_#E0DEDB_inset]"
-                      : "border border-[rgba(2,6,23,0.08)]"
-                  }`}
+                      : "border border-[rgba(2,6,23,0.08)]",
+                  )}
                 >
                   <div
-                    className={`w-full h-0.5 bg-[rgba(50,45,43,0.08)] overflow-hidden ${isActive ? "opacity-100" : "opacity-0"}`}
+                    className={cn(
+                      "w-full h-0.5 bg-[rgba(50,45,43,0.08)] overflow-hidden",
+                      isActive ? "opacity-100" : "opacity-0",
+                    )}
                   >
                     <div
                       key={animationKey}
@@ -101,13 +106,14 @@ export function DocumentationSection() {
           <div className="w-full md:w-auto rounded-lg flex flex-col justify-center items-center gap-2 order-1 md:order-2 md:px-0 px-0">
             <div className="w-full md:w-[580px] h-[250px] md:h-[420px] bg-white shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] overflow-hidden rounded-lg flex flex-col justify-start items-start">
               <div
-                className={`w-full h-full transition-all duration-300 ${
+                className={cn(
+                  "w-full h-full transition-all duration-300",
                   activeCard === 0
                     ? "bg-linear-to-br from-blue-50 to-blue-100"
                     : activeCard === 1
                       ? "bg-linear-to-br from-purple-50 to-purple-100"
-                      : "bg-linear-to-br from-green-50 to-green-100"
-                }`}
+                      : "bg-linear-to-br from-green-50 to-green-100",
+                )}
               />
             </div>
           </div>

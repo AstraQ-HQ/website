@@ -9,11 +9,7 @@ export function CTASection() {
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
                 className="absolute h-4 -rotate-45 origin-top-left outline-[0.5px] outline-[rgba(3,7,18,0.08)] outline-offset-[-0.25px] -left-full w-[300%]"
-                style={{
-                  top: `${i * 16 - 120}px`,
-                  left: "-100%",
-                  width: "300%",
-                }}
+                style={{ top: `${i * 16 - 120}px` }}
               ></div>
             ))}
           </div>
@@ -32,7 +28,7 @@ export function CTASection() {
           </div>
           <div className="w-full max-w-[497px] flex flex-col justify-center items-center gap-12">
             <div className="flex justify-start items-center gap-4">
-              <div className="h-10 px-12 py-[6px] relative bg-[#37322F] shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset] overflow-hidden rounded-full flex justify-center items-center cursor-pointer hover:bg-[#2A2520] transition-colors">
+              <div className="h-10 px-12 py-[6px] relative bg-(--landing-ink) shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset] overflow-hidden rounded-full flex justify-center items-center cursor-pointer hover:bg-[#2A2520] transition-colors">
                 <div className="w-44 h-[41px] absolute left-0 top-0 bg-linear-to-b from-[rgba(255,255,255,0)] to-[rgba(0,0,0,0.10)] mix-blend-multiply"></div>
                 <div className="flex flex-col justify-center text-white text-[13px] font-medium leading-5 font-sans">
                   Start for free

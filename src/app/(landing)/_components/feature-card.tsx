@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 export function FeatureCard({
   title,
   description,
@@ -14,17 +16,18 @@ export function FeatureCard({
   return (
     <button
       type="button"
-      className={`w-full md:flex-1 self-stretch px-6 py-5 overflow-hidden flex flex-col justify-start items-start gap-2 cursor-pointer relative border-b md:border-b-0 last:border-b-0 ${
+      className={cn(
+        "w-full md:flex-1 self-stretch px-6 py-5 overflow-hidden flex flex-col justify-start items-start gap-2 cursor-pointer relative border-b md:border-b-0 last:border-b-0",
         isActive
-          ? "bg-white shadow-[0px_0px_0px_0.75px_#E0DEDB_inset]"
-          : "border-l-0 border-r-0 md:border border-[#E0DEDB]/80"
-      }`}
+          ? "bg-white shadow-[0px_0px_0px_0.75px_var(--landing-border)_inset]"
+          : "border-l-0 border-r-0 md:border border-[rgba(224,222,219,0.8)]",
+      )}
       onClick={onClick}
     >
       {isActive && (
         <div className="absolute top-0 left-0 w-full h-0.5 bg-[rgba(50,45,43,0.08)]">
           <div
-            className="h-full bg-[#322D2B] transition-all duration-100 ease-linear"
+            className="h-full bg-(--landing-ink) transition-all duration-100 ease-linear"
             style={{ width: `${progress}%` }}
           />
         </div>

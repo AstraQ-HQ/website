@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function TestimonialsSection() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -65,12 +66,10 @@ export function TestimonialsSection() {
         <div className="flex-1 py-16 md:py-17 flex flex-col md:flex-row justify-center items-end gap-6">
           <div className="self-stretch px-3 md:px-12 justify-center items-start gap-4 flex flex-col md:flex-row">
             <Image
-              className="w-48 h-50 md:w-48 md:h-50 rounded-lg object-cover transition-all duration-700 ease-in-out"
-              style={{
-                opacity: isTransitioning ? 0.6 : 1,
-                transform: isTransitioning ? "scale(0.95)" : "scale(1)",
-                transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
-              }}
+              className={cn(
+                "w-48 h-50 md:w-48 md:h-50 rounded-lg object-cover transition-all duration-700 ease-in-out",
+                isTransitioning ? "opacity-60 scale-95" : "opacity-100 scale-100",
+              )}
               src={testimonials[activeTestimonial].image || "/placeholder.svg"}
               alt={testimonials[activeTestimonial].name}
               width={192}
@@ -79,20 +78,18 @@ export function TestimonialsSection() {
             />
             <div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 pb-0 pt-0">
               <div
-                className="self-stretch justify-start flex flex-col text-[#49423D] text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight"
-                style={{
-                  filter: isTransitioning ? "blur(4px)" : "blur(0px)",
-                  transition: "filter 0.7s ease-in-out",
-                }}
+                className={cn(
+                  "self-stretch justify-start flex flex-col text-[#49423D] text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight",
+                  isTransitioning ? "blur-xs" : "blur-none",
+                )}
               >
                 "{testimonials[activeTestimonial].quote}"
               </div>
               <div
-                className="self-stretch flex flex-col justify-start items-start gap-1 transition-all duration-700 ease-in-out"
-                style={{
-                  filter: isTransitioning ? "blur(4px)" : "blur(0px)",
-                  transition: "filter 0.7s ease-in-out",
-                }}
+                className={cn(
+                  "self-stretch flex flex-col justify-start items-start gap-1 transition-all duration-700 ease-in-out",
+                  isTransitioning ? "blur-xs" : "blur-none",
+                )}
               >
                 <div className="self-stretch justify-center flex flex-col text-[rgba(73,66,61,0.90)] text-lg font-medium leading-[26px] font-sans">
                   {testimonials[activeTestimonial].name}
@@ -116,7 +113,7 @@ export function TestimonialsSection() {
               aria-label="Previous testimonial"
             >
               <div className="size-6 relative overflow-hidden">
-                <ArrowLeftCircleIcon className="size-6 text-[#46413E]" />
+                <ArrowLeftIcon className="size-6 text-[#46413E]" />
               </div>
             </button>
             <button
@@ -126,7 +123,7 @@ export function TestimonialsSection() {
               aria-label="Next testimonial"
             >
               <div className="size-6 relative overflow-hidden">
-                <ArrowRightCircleIcon className="size-6 text-[#46413E]" />
+                <ArrowRightIcon className="size-6 text-[#46413E]" />
               </div>
             </button>
           </div>

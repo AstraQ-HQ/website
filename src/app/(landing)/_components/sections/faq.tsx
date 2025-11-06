@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface FAQItem {
   question: string;
@@ -85,17 +86,19 @@ export function FAQSection() {
                     </div>
                     <div className="flex justify-center items-center">
                       <ChevronDownIcon
-                        className={`w-6 h-6 text-[rgba(73,66,61,0.60)] transition-transform duration-300 ease-in-out ${
-                          isOpen ? "rotate-180" : "rotate-0"
-                        }`}
+                        className={cn(
+                          "size-6 text-[rgba(73,66,61,0.60)] transition-transform duration-300 ease-in-out",
+                          isOpen ? "rotate-180" : "rotate-0",
+                        )}
                       />
                     </div>
                   </button>
 
                   <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                    }`}
+                    className={cn(
+                      "overflow-hidden transition-all duration-300 ease-in-out",
+                      isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+                    )}
                   >
                     <div className="px-5 pb-[18px] text-[#605A57] text-sm font-normal leading-6 font-sans">
                       {item.answer}
