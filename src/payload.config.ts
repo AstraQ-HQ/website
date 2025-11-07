@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { FixedToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
@@ -24,6 +25,11 @@ export default buildConfig({
   globals,
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
+  }),
+  email: resendAdapter({
+    defaultFromAddress: "info@astraqcyberdefence.com",
+    defaultFromName: "Astraq Cyber Defence",
+    apiKey: env.RESEND_API_KEY,
   }),
   secret: env.PAYLOAD_SECRET,
   typescript: {

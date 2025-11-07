@@ -35,6 +35,11 @@ export const Company: GlobalConfig = {
       required: false,
     },
     {
+      name: "contactUsUrl",
+      type: "text",
+      required: true,
+    },
+    {
       name: "address",
       type: "group",
       fields: [

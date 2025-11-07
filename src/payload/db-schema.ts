@@ -337,6 +337,7 @@ export const company = sqliteTable(
     email: text("email"),
     phone: text("phone"),
     website: text("website"),
+    contactUsUrl: text("contact_us_url").notNull(),
     address_line1: text("address_line1"),
     address_line2: text("address_line2"),
     address_city: text("address_city"),

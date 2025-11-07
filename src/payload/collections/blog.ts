@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { env } from "@/env";
 
 export const Blog: CollectionConfig = {
   slug: "blog",
@@ -8,7 +9,12 @@ export const Blog: CollectionConfig = {
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "publishedAt"],
-    livePreview: {},
+    preview: ({ slug }) => `${env.NEXT_PUBLIC_SITE_URL}/blog/${slug}`,
+    livePreview: {
+      url({ data }) {
+        return `${env.NEXT_PUBLIC_SITE_URL}/blog/${data.slug}/preview`;
+      },
+    },
   },
   fields: [
     {

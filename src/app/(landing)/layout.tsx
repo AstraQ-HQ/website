@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Inter } from "next/font/google";
+import { Nunito_Sans, Playfair_Display } from "next/font/google";
 import type React from "react";
 import "@/app/globals.css";
 import { cn } from "@/lib/utils";
 
-const inter = Inter({
+const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-nunito-sans",
   display: "swap",
   preload: true,
 });
 
-const instrumentSerif = Instrument_Serif({
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-instrument-serif",
-  weight: ["400"],
+  variable: "--font-playfair-display",
   display: "swap",
   preload: true,
 });
@@ -30,8 +29,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html
       lang="en"
       className={cn(
-        inter.variable,
-        instrumentSerif.variable,
+        nunitoSans.variable,
+        playfairDisplay.variable,
         "antialiased font-sans scroll-smooth",
       )}
     >

@@ -2,8 +2,7 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import { Footer } from "./_components/layout/footer";
 import { Header } from "./_components/layout/header";
-import { BentoGridSection } from "./_components/sections/bento-grid";
-import { CTASection } from "./_components/sections/cta";
+import { ContactUsSection } from "./_components/sections/contact-us";
 import { DocumentationSection } from "./_components/sections/documentation";
 import { FAQSection } from "./_components/sections/faq";
 import { FeaturesSection } from "./_components/sections/features";
@@ -30,14 +29,13 @@ export default async function Page() {
             <Header header={header} company={company} />
 
             <div className="pt-16 sm:pt-20 md:pt-24 lg:pt-[216px] pb-8 sm:pb-12 md:pb-16 flex flex-col justify-start items-center px-2 sm:px-4 md:px-8 lg:px-0 w-full sm:pl-0 sm:pr-0 pl-0 pr-0">
-              <HeroSection />
+              <HeroSection company={company} />
               <FeaturesSection />
               <SocialProofSection />
-              <BentoGridSection />
               <DocumentationSection />
               <TestimonialsSection />
               <FAQSection />
-              <CTASection />
+              <ContactUsSection />
             </div>
 
             <Footer footer={footer} company={company} />

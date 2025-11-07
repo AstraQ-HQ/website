@@ -37,8 +37,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-instrument-serif: "Instrument Serif", ui-serif, serif;
   --landing-neutral-50: #f7f5f3;
   --landing-ink: #37322f;
   --landing-border: rgba(55, 50, 47, 0.12);
@@ -46,8 +44,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-nunito-sans);
+  --font-serif: var(--font-playfair-display);
   --font-mono:
     ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
   --color-background: var(--background);

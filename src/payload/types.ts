@@ -430,6 +430,7 @@ export interface Company {
   email?: string | null;
   phone?: string | null;
   website?: string | null;
+  contactUsUrl: string;
   address?: {
     line1?: string | null;
     line2?: string | null;
@@ -518,6 +519,7 @@ export interface CompanySelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   website?: T;
+  contactUsUrl?: T;
   address?:
     | T
     | {
