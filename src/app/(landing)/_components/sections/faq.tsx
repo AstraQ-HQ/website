@@ -3,46 +3,13 @@
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import type { SiteInfo as SiteInfoType } from "@/payload/types";
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+type FAQSectionProps = {
+  siteInfo: SiteInfoType;
+};
 
-const faqData: FAQItem[] = [
-  {
-    question: "What is Brillance and who is it for?",
-    answer:
-      "Brillance is a comprehensive billing automation platform designed for businesses that need custom contract management. It's perfect for SaaS companies, service providers, and enterprises looking to streamline their billing processes.",
-  },
-  {
-    question: "How does the custom contract billing work?",
-    answer:
-      "Our platform automatically processes your custom contracts, calculates billing amounts based on your specific terms, and generates invoices. You can set up complex pricing structures, usage-based billing, and custom billing cycles.",
-  },
-  {
-    question: "Can I integrate Brillance with my existing tools?",
-    answer:
-      "Yes! Brillance integrates seamlessly with popular CRM systems, accounting software, and payment processors. We support APIs and webhooks for custom integrations with your existing workflow.",
-  },
-  {
-    question: "What kind of support do you provide?",
-    answer:
-      "We offer 24/7 customer support, dedicated account managers for enterprise clients, comprehensive documentation, and onboarding assistance to help you get started quickly.",
-  },
-  {
-    question: "Is my data secure with Brillance?",
-    answer:
-      "Absolutely. We use enterprise-grade security measures including end-to-end encryption, SOC 2 compliance, and regular security audits. Your data is stored in secure, redundant data centers.",
-  },
-  {
-    question: "How do I get started with Brillance?",
-    answer:
-      "Getting started is simple! Sign up for our free trial, connect your existing systems, and our onboarding team will help you set up your first custom billing workflow within 24 hours.",
-  },
-];
-
-export function FAQSection() {
+export function FAQSection({ siteInfo }: FAQSectionProps) {
   const [openItems, setOpenItems] = useState<number[]>([]);
 
   const toggleItem = (index: number) => {
@@ -55,39 +22,37 @@ export function FAQSection() {
     <div className="w-full flex justify-center items-start">
       <div className="flex-1 px-4 md:px-12 py-16 md:py-20 flex flex-col lg:flex-row justify-start items-start gap-6 lg:gap-12">
         <div className="w-full lg:flex-1 flex flex-col justify-center items-start gap-4 lg:py-5">
-          <div className="w-full flex flex-col justify-center text-[#49423D] font-semibold leading-tight md:leading-[44px] font-sans text-4xl tracking-tight">
-            Frequently Asked Questions
+          <div className="w-full flex flex-col justify-center text-secondary-foreground font-semibold leading-tight md:leading-[44px] font-sans text-4xl tracking-tight">
+            {siteInfo.faq.title}
           </div>
-          <div className="w-full text-[#605A57] text-base font-normal leading-7 font-sans">
-            Explore your data, build your dashboard,
-            <br className="hidden md:block" />
-            bring your team together.
+          <div className="w-full text-muted-foreground text-base font-normal leading-7 font-sans">
+            {siteInfo.faq.description}
           </div>
         </div>
 
         <div className="w-full lg:flex-1 flex flex-col justify-center items-center">
           <div className="w-full flex flex-col">
-            {faqData.map((item, index) => {
+            {siteInfo.faq.faqItems.map((item, index) => {
               const isOpen = openItems.includes(index);
 
               return (
                 <div
                   key={item.question}
-                  className="w-full border-b border-[rgba(73,66,61,0.16)] overflow-hidden"
+                  className="w-full border-b border-foreground/20 overflow-hidden"
                 >
                   <button
                     type="button"
                     onClick={() => toggleItem(index)}
-                    className="w-full px-5 py-[18px] flex justify-between items-center gap-5 text-left hover:bg-[rgba(73,66,61,0.02)] transition-colors duration-200"
+                    className="w-full px-5 py-[18px] flex justify-between items-center gap-5 text-left hover:bg-foreground/5 transition-colors duration-200"
                     aria-expanded={isOpen}
                   >
-                    <div className="flex-1 text-[#49423D] text-base font-medium leading-6 font-sans">
+                    <div className="flex-1 text-secondary-foreground text-base font-medium leading-6 font-sans">
                       {item.question}
                     </div>
                     <div className="flex justify-center items-center">
                       <ChevronDownIcon
                         className={cn(
-                          "size-6 text-[rgba(73,66,61,0.60)] transition-transform duration-300 ease-in-out",
+                          "size-6 text-foreground/60 transition-transform duration-300 ease-in-out",
                           isOpen ? "rotate-180" : "rotate-0",
                         )}
                       />
@@ -100,7 +65,7 @@ export function FAQSection() {
                       isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
                     )}
                   >
-                    <div className="px-5 pb-[18px] text-[#605A57] text-sm font-normal leading-6 font-sans">
+                    <div className="px-5 pb-[18px] text-muted-foreground text-sm font-normal leading-6 font-sans">
                       {item.answer}
                     </div>
                   </div>

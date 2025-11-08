@@ -95,12 +95,14 @@ export interface Config {
     footer: Footer;
     header: Header;
     'legal-pages': LegalPage;
+    siteInfo: SiteInfo;
   };
   globalsSelect: {
     company: CompanySelect<false> | CompanySelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
+    siteInfo: SiteInfoSelect<false> | SiteInfoSelect<true>;
   };
   locale: null;
   user: User & {
@@ -510,6 +512,46 @@ export interface LegalPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteInfo".
+ */
+export interface SiteInfo {
+  id: number;
+  title: string;
+  subtitle: string;
+  backedBy: {
+    title: string;
+    description: string;
+    backers: {
+      logo: number | Media;
+      name: string;
+      url: string;
+      id?: string | null;
+    }[];
+  };
+  services: {
+    title: string;
+    description: string;
+    services: {
+      title: string;
+      description: string;
+      illustration?: (number | null) | Media;
+      id?: string | null;
+    }[];
+  };
+  faq: {
+    title: string;
+    description: string;
+    faqItems: {
+      question: string;
+      answer: string;
+      id?: string | null;
+    }[];
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "company_select".
  */
 export interface CompanySelect<T extends boolean = true> {
@@ -590,6 +632,58 @@ export interface LegalPagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteInfo_select".
+ */
+export interface SiteInfoSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  backedBy?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        backers?:
+          | T
+          | {
+              logo?: T;
+              name?: T;
+              url?: T;
+              id?: T;
+            };
+      };
+  services?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        services?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              illustration?: T;
+              id?: T;
+            };
+      };
+  faq?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        faqItems?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

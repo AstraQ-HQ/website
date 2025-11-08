@@ -61,7 +61,7 @@ export function TestimonialsSection() {
   };
 
   return (
-    <div className="w-full border-b border-[rgba(55,50,47,0.12)] flex flex-col justify-center items-center">
+    <div className="w-full border-b border-border flex flex-col justify-center items-center">
       <div className="self-stretch px-2 overflow-hidden flex justify-start items-center bg-background border border-b border-l-0 border-r-0 border-t-0">
         <div className="flex-1 py-16 md:py-17 flex flex-col md:flex-row justify-center items-end gap-6">
           <div className="self-stretch px-3 md:px-12 justify-center items-start gap-4 flex flex-col md:flex-row">
@@ -70,8 +70,8 @@ export function TestimonialsSection() {
                 "w-48 h-50 md:w-48 md:h-50 rounded-lg object-cover transition-all duration-700 ease-in-out",
                 isTransitioning ? "opacity-60 scale-95" : "opacity-100 scale-100",
               )}
-              src={testimonials[activeTestimonial].image || "/placeholder.svg"}
-              alt={testimonials[activeTestimonial].name}
+              src={testimonials[activeTestimonial]?.image || "/placeholder.svg"}
+              alt={testimonials[activeTestimonial]?.name ?? ""}
               width={192}
               height={200}
               unoptimized
@@ -79,11 +79,11 @@ export function TestimonialsSection() {
             <div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 pb-0 pt-0">
               <div
                 className={cn(
-                  "self-stretch justify-start flex flex-col text-[#49423D] text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight",
+                  "self-stretch justify-start flex flex-col text-secondary-foreground text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight",
                   isTransitioning ? "blur-xs" : "blur-none",
                 )}
               >
-                "{testimonials[activeTestimonial].quote}"
+                "{testimonials[activeTestimonial]?.quote ?? ""}"
               </div>
               <div
                 className={cn(
@@ -91,11 +91,11 @@ export function TestimonialsSection() {
                   isTransitioning ? "blur-xs" : "blur-none",
                 )}
               >
-                <div className="self-stretch justify-center flex flex-col text-[rgba(73,66,61,0.90)] text-lg font-medium leading-[26px] font-sans">
-                  {testimonials[activeTestimonial].name}
+                <div className="self-stretch justify-center flex flex-col text-foreground/90 text-lg font-medium leading-[26px] font-sans">
+                  {testimonials[activeTestimonial]?.name ?? ""}
                 </div>
-                <div className="self-stretch justify-center flex flex-col text-[rgba(73,66,61,0.70)] text-lg font-medium leading-[26px] font-sans">
-                  {testimonials[activeTestimonial].company}
+                <div className="self-stretch justify-center flex flex-col text-foreground/70 text-lg font-medium leading-[26px] font-sans">
+                  {testimonials[activeTestimonial]?.company ?? ""}
                 </div>
               </div>
             </div>
@@ -109,21 +109,21 @@ export function TestimonialsSection() {
                   (activeTestimonial - 1 + testimonials.length) % testimonials.length,
                 )
               }
-              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-[rgba(0,0,0,0.15)] justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-foreground/20 justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
               aria-label="Previous testimonial"
             >
               <div className="size-6 relative overflow-hidden">
-                <ArrowLeftIcon className="size-6 text-[#46413E]" />
+                <ArrowLeftIcon className="size-6 text-foreground" />
               </div>
             </button>
             <button
               type="button"
               onClick={() => handleNavigationClick((activeTestimonial + 1) % testimonials.length)}
-              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-[rgba(0,0,0,0.15)] justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-foreground/20 justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
               aria-label="Next testimonial"
             >
               <div className="size-6 relative overflow-hidden">
-                <ArrowRightIcon className="size-6 text-[#46413E]" />
+                <ArrowRightIcon className="size-6 text-foreground" />
               </div>
             </button>
           </div>

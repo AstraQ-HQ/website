@@ -452,6 +452,96 @@ export const legal_pages = sqliteTable("legal_pages", {
   ),
 });
 
+export const site_info_backed_by_backers = sqliteTable(
+  "site_info_backed_by_backers",
+  {
+    _order: integer("_order").notNull(),
+    _parentID: integer("_parent_id").notNull(),
+    id: text("id").primaryKey(),
+    logo: integer("logo_id")
+      .notNull()
+      .references(() => media.id, {
+        onDelete: "set null",
+      }),
+    name: text("name").notNull(),
+    url: text("url").notNull(),
+  },
+  (columns) => [
+    index("site_info_backed_by_backers_order_idx").on(columns._order),
+    index("site_info_backed_by_backers_parent_id_idx").on(columns._parentID),
+    index("site_info_backed_by_backers_logo_idx").on(columns.logo),
+    foreignKey({
+      columns: [columns["_parentID"]],
+      foreignColumns: [site_info.id],
+      name: "site_info_backed_by_backers_parent_id_fk",
+    }).onDelete("cascade"),
+  ],
+);
+
+export const site_info_services_services = sqliteTable(
+  "site_info_services_services",
+  {
+    _order: integer("_order").notNull(),
+    _parentID: integer("_parent_id").notNull(),
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    illustration: integer("illustration_id").references(() => media.id, {
+      onDelete: "set null",
+    }),
+  },
+  (columns) => [
+    index("site_info_services_services_order_idx").on(columns._order),
+    index("site_info_services_services_parent_id_idx").on(columns._parentID),
+    index("site_info_services_services_illustration_idx").on(
+      columns.illustration,
+    ),
+    foreignKey({
+      columns: [columns["_parentID"]],
+      foreignColumns: [site_info.id],
+      name: "site_info_services_services_parent_id_fk",
+    }).onDelete("cascade"),
+  ],
+);
+
+export const site_info_faq_faq_items = sqliteTable(
+  "site_info_faq_faq_items",
+  {
+    _order: integer("_order").notNull(),
+    _parentID: integer("_parent_id").notNull(),
+    id: text("id").primaryKey(),
+    question: text("question").notNull(),
+    answer: text("answer").notNull(),
+  },
+  (columns) => [
+    index("site_info_faq_faq_items_order_idx").on(columns._order),
+    index("site_info_faq_faq_items_parent_id_idx").on(columns._parentID),
+    foreignKey({
+      columns: [columns["_parentID"]],
+      foreignColumns: [site_info.id],
+      name: "site_info_faq_faq_items_parent_id_fk",
+    }).onDelete("cascade"),
+  ],
+);
+
+export const site_info = sqliteTable("site_info", {
+  id: integer("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  backedBy_title: text("backed_by_title").notNull(),
+  backedBy_description: text("backed_by_description").notNull(),
+  services_title: text("services_title").notNull(),
+  services_description: text("services_description").notNull(),
+  faq_title: text("faq_title").notNull(),
+  faq_description: text("faq_description").notNull(),
+  updatedAt: text("updated_at").default(
+    sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+  ),
+  createdAt: text("created_at").default(
+    sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+  ),
+});
+
 export const relations_users_sessions = relations(
   users_sessions,
   ({ one }) => ({
@@ -619,6 +709,57 @@ export const relations_header = relations(header, ({ many }) => ({
   }),
 }));
 export const relations_legal_pages = relations(legal_pages, () => ({}));
+export const relations_site_info_backed_by_backers = relations(
+  site_info_backed_by_backers,
+  ({ one }) => ({
+    _parentID: one(site_info, {
+      fields: [site_info_backed_by_backers._parentID],
+      references: [site_info.id],
+      relationName: "backedBy_backers",
+    }),
+    logo: one(media, {
+      fields: [site_info_backed_by_backers.logo],
+      references: [media.id],
+      relationName: "logo",
+    }),
+  }),
+);
+export const relations_site_info_services_services = relations(
+  site_info_services_services,
+  ({ one }) => ({
+    _parentID: one(site_info, {
+      fields: [site_info_services_services._parentID],
+      references: [site_info.id],
+      relationName: "services_services",
+    }),
+    illustration: one(media, {
+      fields: [site_info_services_services.illustration],
+      references: [media.id],
+      relationName: "illustration",
+    }),
+  }),
+);
+export const relations_site_info_faq_faq_items = relations(
+  site_info_faq_faq_items,
+  ({ one }) => ({
+    _parentID: one(site_info, {
+      fields: [site_info_faq_faq_items._parentID],
+      references: [site_info.id],
+      relationName: "faq_faqItems",
+    }),
+  }),
+);
+export const relations_site_info = relations(site_info, ({ many }) => ({
+  backedBy_backers: many(site_info_backed_by_backers, {
+    relationName: "backedBy_backers",
+  }),
+  services_services: many(site_info_services_services, {
+    relationName: "services_services",
+  }),
+  faq_faqItems: many(site_info_faq_faq_items, {
+    relationName: "faq_faqItems",
+  }),
+}));
 
 type DatabaseSchema = {
   users_sessions: typeof users_sessions;
@@ -640,6 +781,10 @@ type DatabaseSchema = {
   header_links: typeof header_links;
   header: typeof header;
   legal_pages: typeof legal_pages;
+  site_info_backed_by_backers: typeof site_info_backed_by_backers;
+  site_info_services_services: typeof site_info_services_services;
+  site_info_faq_faq_items: typeof site_info_faq_faq_items;
+  site_info: typeof site_info;
   relations_users_sessions: typeof relations_users_sessions;
   relations_users: typeof relations_users;
   relations_media: typeof relations_media;
@@ -659,6 +804,10 @@ type DatabaseSchema = {
   relations_header_links: typeof relations_header_links;
   relations_header: typeof relations_header;
   relations_legal_pages: typeof relations_legal_pages;
+  relations_site_info_backed_by_backers: typeof relations_site_info_backed_by_backers;
+  relations_site_info_services_services: typeof relations_site_info_services_services;
+  relations_site_info_faq_faq_items: typeof relations_site_info_faq_faq_items;
+  relations_site_info: typeof relations_site_info;
 };
 
 declare module "@payloadcms/db-sqlite" {

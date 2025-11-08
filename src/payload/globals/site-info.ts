@@ -1,0 +1,136 @@
+import type { GlobalConfig } from "payload";
+
+export const SiteInfo: GlobalConfig = {
+  slug: "siteInfo",
+  fields: [
+    {
+      name: "title",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "subtitle",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "backedBy",
+      type: "group",
+      required: true,
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "description",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "backers",
+          type: "array",
+          required: true,
+          minRows: 4,
+          maxRows: 8,
+          fields: [
+            {
+              name: "logo",
+              type: "relationship",
+              relationTo: "media",
+              hasMany: false,
+              required: true,
+            },
+            {
+              name: "name",
+              type: "text",
+              required: true,
+            },
+            {
+              name: "url",
+              type: "text",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "services",
+      type: "group",
+      required: true,
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "description",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "services",
+          type: "array",
+          required: true,
+          maxRows: 8,
+          fields: [
+            {
+              name: "title",
+              type: "text",
+              required: true,
+            },
+            {
+              name: "description",
+              type: "text",
+              required: true,
+            },
+            {
+              name: "illustration",
+              type: "relationship",
+              relationTo: "media",
+              hasMany: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "faq",
+      type: "group",
+      required: true,
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "description",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "faqItems",
+          type: "array",
+          required: true,
+          maxRows: 8,
+          fields: [
+            {
+              name: "question",
+              type: "text",
+              required: true,
+            },
+            {
+              name: "answer",
+              type: "text",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
