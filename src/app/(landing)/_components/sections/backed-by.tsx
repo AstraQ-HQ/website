@@ -9,9 +9,9 @@ type BackedBySectionProps = {
 
 export function BackedBySection({ siteInfo }: BackedBySectionProps) {
   return (
-    <div className="w-full border-b border-border flex flex-col justify-center items-center">
-      <div className="self-stretch px-4 sm:px-6 md:px-24 py-8 sm:py-12 md:py-16 border-b border-border flex justify-center items-center gap-6">
-        <div className="w-full max-w-[586px] px-4 sm:px-6 py-4 sm:py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-3 sm:gap-4">
+    <div className="flex w-full flex-col items-center justify-center border-border border-b">
+      <div className="flex items-center justify-center gap-6 self-stretch border-border border-b px-4 py-8 sm:px-6 sm:py-12 md:px-24 md:py-16">
+        <div className="flex w-full max-w-[586px] flex-col items-center justify-start gap-3 overflow-hidden rounded-lg px-4 py-4 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] sm:gap-4 sm:px-6 sm:py-5">
           <IconBadge
             icon={
               <svg
@@ -56,29 +56,29 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
             }
             text="Backed By"
           />
-          <div className="w-full max-w-[472.55px] text-center flex justify-center flex-col text-secondary-foreground text-xl sm:text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
+          <div className="flex w-full max-w-[472.55px] flex-col justify-center text-center font-sans font-semibold text-secondary-foreground text-xl leading-tight tracking-tight sm:text-2xl md:text-3xl md:leading-[60px] lg:text-5xl">
             {siteInfo.backedBy.title}
           </div>
-          <div className="self-stretch text-center text-muted-foreground text-sm sm:text-base font-normal leading-6 sm:leading-7 font-sans">
+          <div className="self-stretch text-center font-normal font-sans text-muted-foreground text-sm leading-6 sm:text-base sm:leading-7">
             {siteInfo.backedBy.description}
           </div>
         </div>
       </div>
 
-      <div className="self-stretch border-border flex justify-center items-start border-t border-b-0">
-        <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
-          <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+      <div className="flex items-start justify-center self-stretch border-border border-t border-b-0">
+        <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
+          <div className="absolute top-[-120px] left-[-40px] flex w-[120px] flex-col items-start justify-start sm:left-[-50px] sm:w-[140px] md:left-[-58px] md:w-[162px]">
             {Array.from({ length: 50 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px]"
+                className="-rotate-45 h-3 origin-top-left self-stretch outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px] sm:h-4"
               />
             ))}
           </div>
         </div>
 
-        <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-0 border-l border-r border-border">
+        <div className="grid flex-1 grid-cols-2 gap-0 border-border border-r border-l sm:grid-cols-4 md:grid-cols-4">
           {siteInfo.backedBy.backers.map((backer, index) => {
             const isMobileFirstColumn = index % 2 === 0;
             const isDesktopFirstColumn = index % 4 === 0;
@@ -91,8 +91,8 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={index}
                 className={cn(
-                  "h-24 xs:h-28 sm:h-32 md:h-36 lg:h-40 flex justify-center items-center gap-1 xs:gap-2 sm:gap-3",
-                  "border-b border-border/60",
+                  "flex h-24 xs:h-28 items-center justify-center gap-1 xs:gap-2 sm:h-32 sm:gap-3 md:h-36 lg:h-40",
+                  "border-border/60 border-b",
                   index < 6 ? "sm:border-b-[0.5px]" : "sm:border-b",
                   index >= 6 ? "border-b" : "",
                   isMobileFirstColumn ? "border-r-[0.5px]" : "",
@@ -104,7 +104,7 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
                   "border-border/60",
                 )}
               >
-                <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 relative shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] overflow-hidden rounded-full">
+                <div className="relative h-6 xs:h-7 w-6 xs:w-7 overflow-hidden rounded-full shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10">
                   <Image
                     src={
                       typeof backer.logo === "number"
@@ -114,10 +114,10 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
                     alt={backer.name}
                     width={40}
                     height={40}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="text-center flex justify-center flex-col text-foreground text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-tight md:leading-9 font-sans">
+                <div className="flex flex-col justify-center text-center font-medium font-sans text-foreground text-sm xs:text-base leading-tight sm:text-lg md:text-xl md:leading-9 lg:text-2xl">
                   {backer.name}
                 </div>
               </div>
@@ -125,13 +125,13 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
           })}
         </div>
 
-        <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
-          <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+        <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
+          <div className="absolute top-[-120px] left-[-40px] flex w-[120px] flex-col items-start justify-start sm:left-[-50px] sm:w-[140px] md:left-[-58px] md:w-[162px]">
             {Array.from({ length: 50 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px]"
+                className="-rotate-45 h-3 origin-top-left self-stretch outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px] sm:h-4"
               />
             ))}
           </div>

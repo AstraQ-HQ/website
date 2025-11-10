@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Playfair_Display } from "next/font/google";
-import type React from "react";
 import "@/app/globals.css";
 import { cn } from "@/lib/utils";
 
@@ -24,14 +23,14 @@ export const metadata: Metadata = {
     "Streamline your billing process with seamless automation for every custom contract, tailored by Brillance.",
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={cn(
         nunitoSans.variable,
         playfairDisplay.variable,
-        "antialiased font-sans scroll-smooth",
+        "scroll-smooth font-sans antialiased",
       )}
     >
       <body className="font-sans antialiased">{children}</body>

@@ -6,5 +6,12 @@ export const Users: CollectionConfig = {
     useAsTitle: "email",
   },
   auth: true,
-  fields: [],
+  fields: [
+    {
+      name: "displayName",
+      type: "text",
+      required: true,
+      defaultValue: "Unknown User",
+    },
+  ],
 };

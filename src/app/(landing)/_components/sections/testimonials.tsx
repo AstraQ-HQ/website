@@ -61,25 +61,25 @@ export function TestimonialsSection() {
   };
 
   return (
-    <div className="w-full border-b border-border flex flex-col justify-center items-center">
-      <div className="self-stretch px-2 overflow-hidden flex justify-start items-center bg-background border border-b border-l-0 border-r-0 border-t-0">
-        <div className="flex-1 py-16 md:py-17 flex flex-col md:flex-row justify-center items-end gap-6">
-          <div className="self-stretch px-3 md:px-12 justify-center items-start gap-4 flex flex-col md:flex-row">
+    <div className="flex w-full flex-col items-center justify-center border-border border-b">
+      <div className="flex items-center justify-start self-stretch overflow-hidden border border-t-0 border-r-0 border-b border-l-0 bg-background px-2">
+        <div className="flex flex-1 flex-col items-end justify-center gap-6 py-16 md:flex-row md:py-17">
+          <div className="flex flex-col items-start justify-center gap-4 self-stretch px-3 md:flex-row md:px-12">
             <Image
               className={cn(
-                "w-48 h-50 md:w-48 md:h-50 rounded-lg object-cover transition-all duration-700 ease-in-out",
-                isTransitioning ? "opacity-60 scale-95" : "opacity-100 scale-100",
+                "h-50 w-48 rounded-lg object-cover transition-all duration-700 ease-in-out md:h-50 md:w-48",
+                isTransitioning ? "scale-95 opacity-60" : "scale-100 opacity-100",
               )}
-              src={testimonials[activeTestimonial]?.image || "/placeholder.svg"}
+              src={testimonials[activeTestimonial]?.image ?? "/placeholder.svg"}
               alt={testimonials[activeTestimonial]?.name ?? ""}
               width={192}
               height={200}
               unoptimized
             />
-            <div className="flex-1 px-6 py-6 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)] overflow-hidden flex flex-col justify-start items-start gap-6 pb-0 pt-0">
+            <div className="flex flex-1 flex-col items-start justify-start gap-6 overflow-hidden px-6 py-6 pt-0 pb-0 shadow-[0px_0px_0px_0.75px_rgba(50,45,43,0.12)]">
               <div
                 className={cn(
-                  "self-stretch justify-start flex flex-col text-secondary-foreground text-2xl md:text-[32px] font-medium leading-10 md:leading-[42px] font-sans h-[200px] md:h-[210px] overflow-hidden line-clamp-5 transition-all duration-700 ease-in-out tracking-tight",
+                  "line-clamp-5 flex h-[200px] flex-col justify-start self-stretch overflow-hidden font-medium font-sans text-2xl text-secondary-foreground leading-10 tracking-tight transition-all duration-700 ease-in-out md:h-[210px] md:text-[32px] md:leading-[42px]",
                   isTransitioning ? "blur-xs" : "blur-none",
                 )}
               >
@@ -87,21 +87,21 @@ export function TestimonialsSection() {
               </div>
               <div
                 className={cn(
-                  "self-stretch flex flex-col justify-start items-start gap-1 transition-all duration-700 ease-in-out",
+                  "flex flex-col items-start justify-start gap-1 self-stretch transition-all duration-700 ease-in-out",
                   isTransitioning ? "blur-xs" : "blur-none",
                 )}
               >
-                <div className="self-stretch justify-center flex flex-col text-foreground/90 text-lg font-medium leading-[26px] font-sans">
+                <div className="flex flex-col justify-center self-stretch font-medium font-sans text-foreground/90 text-lg leading-[26px]">
                   {testimonials[activeTestimonial]?.name ?? ""}
                 </div>
-                <div className="self-stretch justify-center flex flex-col text-foreground/70 text-lg font-medium leading-[26px] font-sans">
+                <div className="flex flex-col justify-center self-stretch font-medium font-sans text-foreground/70 text-lg leading-[26px]">
                   {testimonials[activeTestimonial]?.company ?? ""}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pr-6 justify-start items-start gap-3.5 flex">
+          <div className="flex items-start justify-start gap-3.5 pr-6">
             <button
               type="button"
               onClick={() =>
@@ -109,20 +109,20 @@ export function TestimonialsSection() {
                   (activeTestimonial - 1 + testimonials.length) % testimonials.length,
                 )
               }
-              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-foreground/20 justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+              className="flex size-9 items-center justify-center gap-2 overflow-hidden rounded-full border border-foreground/20 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] transition-colors hover:bg-gray-50"
               aria-label="Previous testimonial"
             >
-              <div className="size-6 relative overflow-hidden">
+              <div className="relative size-6 overflow-hidden">
                 <ArrowLeftIcon className="size-6 text-foreground" />
               </div>
             </button>
             <button
               type="button"
               onClick={() => handleNavigationClick((activeTestimonial + 1) % testimonials.length)}
-              className="size-9 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] overflow-hidden rounded-full border border-foreground/20 justify-center items-center gap-2 flex hover:bg-gray-50 transition-colors"
+              className="flex size-9 items-center justify-center gap-2 overflow-hidden rounded-full border border-foreground/20 shadow-[0px_1px_2px_rgba(0,0,0,0.08)] transition-colors hover:bg-gray-50"
               aria-label="Next testimonial"
             >
-              <div className="size-6 relative overflow-hidden">
+              <div className="relative size-6 overflow-hidden">
                 <ArrowRightIcon className="size-6 text-foreground" />
               </div>
             </button>

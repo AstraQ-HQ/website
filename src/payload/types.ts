@@ -70,7 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     blog: Blog;
-    projects: Project;
+    products: Product;
+    'legal-pages': LegalPage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,7 +82,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -94,14 +96,12 @@ export interface Config {
     company: Company;
     footer: Footer;
     header: Header;
-    'legal-pages': LegalPage;
     siteInfo: SiteInfo;
   };
   globalsSelect: {
     company: CompanySelect<false> | CompanySelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
-    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     siteInfo: SiteInfoSelect<false> | SiteInfoSelect<true>;
   };
   locale: null;
@@ -137,6 +137,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  displayName: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -182,7 +183,16 @@ export interface Media {
 export interface Blog {
   id: number;
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   shortDescription?: string | null;
+  author?: (number | null) | User;
+  thumbnailImage?: (number | null) | Media;
+  publishedAt?: string | null;
+  category?: ('blog-post' | 'case-study' | 'success-story') | null;
   content: {
     root: {
       type: string;
@@ -198,19 +208,22 @@ export interface Blog {
     };
     [k: string]: unknown;
   };
-  thumbnailImage?: (number | null) | Media;
-  publishedAt?: string | null;
-  author?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
+ * via the `definition` "products".
  */
-export interface Project {
+export interface Product {
   id: number;
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   description?: string | null;
   thumbnailImage?: (number | null) | Media;
   publishedAt?: string | null;
@@ -221,6 +234,36 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages".
+ */
+export interface LegalPage {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -261,8 +304,12 @@ export interface PayloadLockedDocument {
         value: number | Blog;
       } | null)
     | ({
-        relationTo: 'projects';
-        value: number | Project;
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'legal-pages';
+        value: number | LegalPage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -311,6 +358,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  displayName?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -353,20 +401,26 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface BlogSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
+  slug?: T;
   shortDescription?: T;
-  content?: T;
+  author?: T;
   thumbnailImage?: T;
   publishedAt?: T;
-  author?: T;
+  category?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects_select".
+ * via the `definition` "products_select".
  */
-export interface ProjectsSelect<T extends boolean = true> {
+export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
+  slug?: T;
   description?: T;
   thumbnailImage?: T;
   publishedAt?: T;
@@ -377,6 +431,18 @@ export interface ProjectsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages_select".
+ */
+export interface LegalPagesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -481,32 +547,6 @@ export interface Header {
     url: string;
     id?: string | null;
   }[];
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "legal-pages".
- */
-export interface LegalPage {
-  id: number;
-  title: string;
-  slug: string;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -621,18 +661,6 @@ export interface HeaderSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "legal-pages_select".
- */
-export interface LegalPagesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

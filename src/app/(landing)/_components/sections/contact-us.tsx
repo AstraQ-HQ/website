@@ -36,47 +36,47 @@ export function ContactUsSection() {
     } else {
       setSubmitStatus({
         success: false,
-        message: result.error || "Failed to send message. Please try again.",
+        message: result.error ?? "Failed to send message. Please try again.",
       });
     }
   }
 
   return (
-    <div className="w-full relative overflow-hidden flex flex-col justify-center items-center gap-2">
+    <div className="relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden">
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-      <div className="self-stretch px-6 md:px-24 py-12 md:py-12 border-t border-b border-border flex justify-center items-center gap-6 relative z-10">
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <div className="w-full h-full relative">
+      <div className="relative z-10 flex items-center justify-center gap-6 self-stretch border-border border-t border-b px-6 py-12 md:px-24 md:py-12">
+        <div className="absolute inset-0 h-full w-full overflow-hidden">
+          <div className="relative h-full w-full">
             {Array.from({ length: 300 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="absolute h-4 -rotate-45 origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px] -left-full w-[300%]"
+                className="-rotate-45 -left-full absolute h-4 w-[300%] origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px]"
                 style={{ top: `${i * 16 - 120}px` }}
-              ></div>
+              />
             ))}
           </div>
         </div>
 
-        <div className="w-full px-6 py-5 md:py-8 overflow-hidden rounded-lg flex justify-center items-center gap-6 relative z-20">
-          <div className="self-stretch flex flex-col justify-start items-start gap-3">
-            <div className="self-stretch flex justify-center flex-col text-secondary-foreground text-3xl md:text-5xl font-semibold leading-tight md:leading-[56px] font-sans tracking-tight">
+        <div className="relative z-20 flex w-full items-center justify-center gap-6 overflow-hidden rounded-lg px-6 py-5 md:py-8">
+          <div className="flex flex-col items-start justify-start gap-3 self-stretch">
+            <div className="flex flex-col justify-center self-stretch font-sans font-semibold text-3xl text-secondary-foreground leading-tight tracking-tight md:text-5xl md:leading-[56px]">
               Get in touch
             </div>
-            <div className="self-stretch text-muted-foreground text-base leading-7 font-sans font-medium">
+            <div className="self-stretch font-medium font-sans text-base text-muted-foreground leading-7">
               Have questions? We'd love to hear from you.
               <br />
               Send us a message and we'll respond as soon as possible.
             </div>
           </div>
-          <div className="w-full max-w-[497px] flex flex-col justify-center items-center gap-6">
-            <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
+          <div className="flex w-full max-w-[497px] flex-col items-center justify-center gap-6">
+            <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
               <FieldSet>
                 <FieldGroup>
                   <Field>
                     <FieldLabel
                       htmlFor="name"
-                      className="text-secondary-foreground text-sm font-medium leading-6 font-sans"
+                      className="font-medium font-sans text-secondary-foreground text-sm leading-6"
                     >
                       Name
                     </FieldLabel>
@@ -93,7 +93,7 @@ export function ContactUsSection() {
                   <Field>
                     <FieldLabel
                       htmlFor="email"
-                      className="text-secondary-foreground text-sm font-medium leading-6 font-sans"
+                      className="font-medium font-sans text-secondary-foreground text-sm leading-6"
                     >
                       Email
                     </FieldLabel>
@@ -110,10 +110,10 @@ export function ContactUsSection() {
                   <Field>
                     <FieldLabel
                       htmlFor="company"
-                      className="text-secondary-foreground text-sm font-medium leading-6 font-sans"
+                      className="font-medium font-sans text-secondary-foreground text-sm leading-6"
                     >
                       Company
-                      <FieldDescription className="text-muted-foreground text-xs font-normal leading-5 font-sans">
+                      <FieldDescription className="font-normal font-sans text-muted-foreground text-xs leading-5">
                         Optional
                       </FieldDescription>
                     </FieldLabel>
@@ -129,17 +129,17 @@ export function ContactUsSection() {
                   <Field>
                     <FieldLabel
                       htmlFor="message"
-                      className="text-secondary-foreground text-sm font-medium leading-6 font-sans"
+                      className="font-medium font-sans text-secondary-foreground text-sm leading-6"
                     >
                       Message
                     </FieldLabel>
                     <Textarea
                       id="message"
                       name="message"
-                      placeholder="Tell us about your project or questions..."
+                      placeholder="Tell us about your product or questions..."
                       required
                       disabled={isSubmitting}
-                      className="min-h-[120px] border-border bg-card text-secondary-foreground placeholder:text-muted-foreground focus-visible:ring-border resize-none"
+                      className="min-h-[120px] resize-none border-border bg-card text-secondary-foreground placeholder:text-muted-foreground focus-visible:ring-border"
                     />
                   </Field>
                 </FieldGroup>
@@ -151,22 +151,22 @@ export function ContactUsSection() {
               />
               {submitStatus && (
                 <div
-                  className={`text-sm font-medium ${
+                  className={`font-medium text-sm ${
                     submitStatus.success ? "text-green-600" : "text-red-600"
                   }`}
                 >
                   {submitStatus.message}
                 </div>
               )}
-              <div className="flex justify-start items-center gap-4">
+              <div className="flex items-center justify-start gap-4">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   variant="default"
-                  className="h-10 px-12 py-[6px] relative shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset] overflow-hidden rounded-full"
+                  className="relative h-10 overflow-hidden rounded-full px-12 py-[6px] shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset]"
                 >
-                  <div className="w-44 h-[41px] absolute left-0 top-0 bg-linear-to-b from-[rgba(255,255,255,0)] to-[rgba(0,0,0,0.10)] mix-blend-multiply"></div>
-                  <div className="flex flex-col justify-center text-primary-foreground text-[13px] font-medium leading-5 font-sans relative z-10">
+                  <div className="absolute top-0 left-0 h-[41px] w-44 bg-linear-to-b from-[rgba(255,255,255,0)] to-[rgba(0,0,0,0.10)] mix-blend-multiply" />
+                  <div className="relative z-10 flex flex-col justify-center font-medium font-sans text-[13px] text-primary-foreground leading-5">
                     {isSubmitting ? "Sending..." : "Send message"}
                   </div>
                 </Button>

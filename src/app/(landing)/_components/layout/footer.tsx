@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Company as CompanyType, Footer as FooterType } from "@/payload/types";
 
@@ -8,21 +9,19 @@ type FooterProps = {
 
 export function Footer({ footer, company }: FooterProps) {
   return (
-    <div className="w-full flex flex-col justify-start items-start">
-      <div className="self-stretch h-auto flex flex-col md:flex-row justify-between items-stretch pr-0 pb-8 pt-0">
-        <div className="h-auto p-4 md:p-8 flex flex-col justify-start items-start gap-8">
-          <div className="self-stretch flex justify-start items-center gap-3">
-            <div className="text-center text-secondary-foreground text-xl font-semibold leading-4 font-sans">
-              {company.name}
-            </div>
+    <div className="flex w-full flex-col items-start justify-start">
+      <div className="flex h-auto flex-col items-stretch justify-between self-stretch pt-0 pr-0 pb-8 md:flex-row">
+        <div className="flex h-auto flex-col items-start justify-start gap-8 p-4 md:p-8">
+          <div className="flex items-center justify-start gap-3 self-stretch">
+            <Image src="/logo.svg" alt={company.name} width={100} height={100} />
           </div>
-          <div className="text-foreground/90 text-sm font-medium leading-[18px] font-sans">
+          <div className="font-medium font-sans text-foreground/90 text-sm leading-[18px]">
             {company.description}
           </div>
 
-          <div className="flex justify-start items-start gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+          <div className="flex items-start justify-start gap-4">
+            <div className="relative h-6 w-6 overflow-hidden">
+              <div className="absolute top-0 left-0 flex h-6 w-6 items-center justify-center">
                 <svg
                   width="16"
                   height="16"
@@ -41,8 +40,8 @@ export function Footer({ footer, company }: FooterProps) {
               </div>
             </div>
 
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+            <div className="relative h-6 w-6 overflow-hidden">
+              <div className="absolute top-0 left-0 flex h-6 w-6 items-center justify-center">
                 <svg
                   width="16"
                   height="16"
@@ -61,8 +60,8 @@ export function Footer({ footer, company }: FooterProps) {
               </div>
             </div>
 
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-6 h-6 left-0 top-0 absolute flex items-center justify-center">
+            <div className="relative h-6 w-6 overflow-hidden">
+              <div className="absolute top-0 left-0 flex h-6 w-6 items-center justify-center">
                 <svg
                   width="16"
                   height="16"
@@ -83,20 +82,20 @@ export function Footer({ footer, company }: FooterProps) {
           </div>
         </div>
 
-        <div className="self-stretch p-4 md:p-8 flex flex-col sm:flex-row flex-wrap justify-start sm:justify-between items-start gap-6 md:gap-8">
+        <div className="flex flex-col flex-wrap items-start justify-start gap-6 self-stretch p-4 sm:flex-row sm:justify-between md:gap-8 md:p-8">
           {footer.footerGroups.map((group) => (
             <div
-              className="flex flex-col justify-start items-start gap-3 flex-1 min-w-[120px]"
+              className="flex min-w-[120px] flex-1 flex-col items-start justify-start gap-3"
               key={group.id}
             >
-              <div className="self-stretch text-foreground/50 text-sm font-medium leading-5 font-sans">
+              <div className="self-stretch font-medium font-sans text-foreground/50 text-sm leading-5">
                 {group.title}
               </div>
-              <div className="flex flex-col justify-end items-start gap-2">
+              <div className="flex flex-col items-start justify-end gap-2">
                 {group.urls.map((url) => (
                   <Link
                     href={url.url}
-                    className="text-secondary-foreground text-sm font-normal leading-5 font-sans cursor-pointer hover:text-foreground transition-colors"
+                    className="cursor-pointer font-normal font-sans text-secondary-foreground text-sm leading-5 transition-colors hover:text-foreground"
                     key={url.id}
                   >
                     {url.label}
@@ -108,14 +107,14 @@ export function Footer({ footer, company }: FooterProps) {
         </div>
       </div>
 
-      <div className="self-stretch h-12 relative overflow-hidden border-t border-b border-border">
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <div className="w-full h-full relative">
+      <div className="relative h-12 self-stretch overflow-hidden border-border border-t border-b">
+        <div className="absolute inset-0 h-full w-full overflow-hidden">
+          <div className="relative h-full w-full">
             {Array.from({ length: 400 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="absolute w-[300px] h-16 border border-foreground/10 -rotate-45 origin-top-left -top-30"
+                className="-rotate-45 -top-30 absolute h-16 w-[300px] origin-top-left border border-foreground/10"
                 style={{ left: `${i * 300 - 600}px` }}
               />
             ))}

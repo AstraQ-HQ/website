@@ -29,27 +29,27 @@ export function ServicesSection({ siteInfo }: ServicesSectionProps) {
   };
 
   return (
-    <div className="w-full border-b border-border flex flex-col justify-center items-center">
-      <div className="self-stretch px-6 md:px-24 py-12 md:py-16 border-b border-border flex justify-center items-center gap-6">
-        <div className="w-full max-w-[586px] px-6 py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)] overflow-hidden rounded-lg flex flex-col justify-start items-center gap-4">
+    <div className="flex w-full flex-col items-center justify-center border-border border-b">
+      <div className="flex items-center justify-center gap-6 self-stretch border-border border-b px-6 py-12 md:px-24 md:py-16">
+        <div className="flex w-full max-w-[586px] flex-col items-center justify-start gap-4 overflow-hidden rounded-lg px-6 py-5 shadow-[0px_2px_4px_rgba(50,45,43,0.06)]">
           <IconBadge
             icon={
-              <div className="w-[10.50px] h-[10.50px] outline-[1.17px] outline-foreground outline-offset-[-0.58px] rounded-full"></div>
+              <div className="h-[10.50px] w-[10.50px] rounded-full outline-[1.17px] outline-foreground outline-offset-[-0.58px]" />
             }
             text="Platform Features"
           />
-          <div className="self-stretch text-center flex justify-center flex-col text-secondary-foreground text-3xl md:text-5xl font-semibold leading-tight md:leading-[60px] font-sans tracking-tight">
+          <div className="flex flex-col justify-center self-stretch text-center font-sans font-semibold text-3xl text-secondary-foreground leading-tight tracking-tight md:text-5xl md:leading-[60px]">
             {siteInfo.services.title}
           </div>
-          <div className="self-stretch text-center text-muted-foreground text-base font-normal leading-7 font-sans">
+          <div className="self-stretch text-center font-normal font-sans text-base text-muted-foreground leading-7">
             {siteInfo.services.description}
           </div>
         </div>
       </div>
 
-      <div className="self-stretch px-4 md:px-9 overflow-hidden flex justify-start items-center">
-        <div className="flex-1 py-8 md:py-11 flex flex-col md:flex-row justify-start items-center gap-6 md:gap-12">
-          <div className="w-full md:w-auto md:max-w-[400px] flex flex-col justify-center items-center gap-4 order-2 md:order-1">
+      <div className="flex items-center justify-start self-stretch overflow-hidden px-4 md:px-9">
+        <div className="flex flex-1 flex-col items-center justify-start gap-6 py-8 md:flex-row md:gap-12 md:py-11">
+          <div className="order-2 flex w-full flex-col items-center justify-center gap-4 md:order-1 md:w-auto md:max-w-[400px]">
             {siteInfo.services.services.map((service, index) => {
               const isActive = index === activeCard;
 
@@ -59,7 +59,7 @@ export function ServicesSection({ siteInfo }: ServicesSectionProps) {
                   key={service.id}
                   onClick={() => handleCardClick(index)}
                   className={cn(
-                    "w-full overflow-hidden flex flex-col justify-start items-start transition-all duration-300 cursor-pointer text-left",
+                    "flex w-full cursor-pointer flex-col items-start justify-start overflow-hidden text-left transition-all duration-300",
                     isActive
                       ? "bg-card shadow-[0px_0px_0px_0.75px_var(--border)_inset]"
                       : "border border-foreground/10",
@@ -67,20 +67,20 @@ export function ServicesSection({ siteInfo }: ServicesSectionProps) {
                 >
                   <div
                     className={cn(
-                      "w-full h-0.5 bg-foreground/10 overflow-hidden",
+                      "h-0.5 w-full overflow-hidden bg-foreground/10",
                       isActive ? "opacity-100" : "opacity-0",
                     )}
                   >
                     <div
                       key={animationKey}
-                      className="h-0.5 bg-primary/90 animate-progress-bar will-change-transform"
+                      className="h-0.5 animate-progress-bar bg-primary/90 will-change-transform"
                     />
                   </div>
-                  <div className="px-6 py-5 w-full flex flex-col gap-2">
-                    <div className="self-stretch flex justify-center flex-col text-secondary-foreground text-sm font-semibold leading-6 font-sans">
+                  <div className="flex w-full flex-col gap-2 px-6 py-5">
+                    <div className="flex flex-col justify-center self-stretch font-sans font-semibold text-secondary-foreground text-sm leading-6">
                       {service.title}
                     </div>
-                    <div className="self-stretch text-muted-foreground text-[13px] font-normal leading-[22px] font-sans whitespace-pre-line">
+                    <div className="self-stretch whitespace-pre-line font-normal font-sans text-[13px] text-muted-foreground leading-[22px]">
                       {service.description}
                     </div>
                   </div>
@@ -89,11 +89,11 @@ export function ServicesSection({ siteInfo }: ServicesSectionProps) {
             })}
           </div>
 
-          <div className="w-full md:w-auto rounded-lg flex flex-col justify-center items-center gap-2 order-1 md:order-2 md:px-0 px-0">
-            <div className="w-full md:w-[580px] h-[250px] md:h-[420px] bg-card shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] overflow-hidden rounded-lg flex flex-col justify-start items-start">
+          <div className="order-1 flex w-full flex-col items-center justify-center gap-2 rounded-lg px-0 md:order-2 md:w-auto md:px-0">
+            <div className="flex h-[250px] w-full flex-col items-start justify-start overflow-hidden rounded-lg bg-card shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] md:h-[420px] md:w-[580px]">
               <div
                 className={cn(
-                  "w-full h-full transition-all duration-300 relative",
+                  "relative h-full w-full transition-all duration-300",
                   activeCard === 0
                     ? "bg-linear-to-br from-blue-50 to-blue-100"
                     : activeCard === 1
@@ -110,7 +110,7 @@ export function ServicesSection({ siteInfo }: ServicesSectionProps) {
                   }
                   alt={siteInfo.services.services[activeCard]?.title ?? ""}
                   fill
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </div>

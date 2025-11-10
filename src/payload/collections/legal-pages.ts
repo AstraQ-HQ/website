@@ -1,6 +1,7 @@
-import type { GlobalConfig } from "payload";
+import type { CollectionConfig } from "payload";
+import { slugField } from "payload";
 
-export const LegalPages: GlobalConfig = {
+export const LegalPages: CollectionConfig = {
   slug: "legal-pages",
   fields: [
     {
@@ -8,11 +9,7 @@ export const LegalPages: GlobalConfig = {
       type: "text",
       required: true,
     },
-    {
-      name: "slug",
-      type: "text",
-      required: true,
-    },
+    slugField({ fieldToUse: "title" }),
     {
       name: "content",
       type: "richText",

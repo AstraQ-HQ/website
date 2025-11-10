@@ -20,7 +20,7 @@ export async function submitContactForm(formData: FormData): Promise<ContactForm
     const data: ContactFormData = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
-      company: (formData.get("company") as string) || undefined,
+      company: (formData.get("company") as string) ?? undefined,
       message: formData.get("message") as string,
       "cf-turnstile-response": formData.get("cf-turnstile-response") as string,
     };

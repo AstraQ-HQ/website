@@ -1,13 +1,15 @@
 import type { CollectionConfig } from "payload";
+import { slugField } from "payload";
 
-export const Projects: CollectionConfig = {
-  slug: "projects",
+export const Products: CollectionConfig = {
+  slug: "products",
   fields: [
     {
       name: "title",
       type: "text",
       required: true,
     },
+    slugField({ fieldToUse: "title" }),
     {
       name: "description",
       type: "textarea",

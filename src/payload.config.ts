@@ -1,7 +1,12 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
-import { FixedToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  FixedToolbarFeature,
+  lexicalEditor,
+  EXPERIMENTAL_TableFeature as TableFeature,
+} from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { env } from "./env";
@@ -23,7 +28,7 @@ export default buildConfig({
   collections,
   globals,
   editor: lexicalEditor({
-    features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
+    features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature(), TableFeature()],
   }),
   secret: env.PAYLOAD_SECRET,
   typescript: {
@@ -38,5 +43,13 @@ export default buildConfig({
     migrationDir: path.resolve(dirname, "payload", "migrations"),
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true,
+      },
+      token: env.BLOB_READ_WRITE_TOKEN,
+    }),
+  ],
 });

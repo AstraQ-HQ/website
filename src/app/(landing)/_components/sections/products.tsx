@@ -44,17 +44,17 @@ export function ProductsSection() {
   };
   return (
     <>
-      <div className="w-full max-w-[960px] lg:w-[960px] pt-2 sm:pt-4 pb-6 sm:pb-8 md:pb-10 px-2 sm:px-4 md:px-6 lg:px-11 flex flex-col justify-center items-center gap-2 relative z-5 my-8 sm:my-12 md:my-16 lg:my-16 mb-0 lg:pb-0">
-        <div className="w-full max-w-[960px] lg:w-[960px] h-[200px] sm:h-[280px] md:h-[450px] lg:h-[695.55px] bg-card shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] overflow-hidden rounded-[6px] sm:rounded-[8px] lg:rounded-[9.06px] flex flex-col justify-start items-start">
-          <div className="self-stretch flex-1 flex justify-start items-start">
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="relative w-full h-full overflow-hidden">
+      <div className="relative z-5 my-8 mb-0 flex w-full max-w-[960px] flex-col items-center justify-center gap-2 px-2 pt-2 pb-6 sm:my-12 sm:px-4 sm:pt-4 sm:pb-8 md:my-16 md:px-6 md:pb-10 lg:my-16 lg:w-[960px] lg:px-11 lg:pb-0">
+        <div className="flex h-[200px] w-full max-w-[960px] flex-col items-start justify-start overflow-hidden rounded-[6px] bg-card shadow-[0px_0px_0px_0.9056603908538818px_rgba(0,0,0,0.08)] sm:h-[280px] sm:rounded-[8px] md:h-[450px] lg:h-[695.55px] lg:w-[960px] lg:rounded-[9.06px]">
+          <div className="flex flex-1 items-start justify-start self-stretch">
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="relative h-full w-full overflow-hidden">
                 <div
                   className={cn(
                     "absolute inset-0 transition-all duration-500 ease-in-out",
                     activeCard === 0
-                      ? "opacity-100 scale-100 blur-0"
-                      : "opacity-0 scale-95 blur-sm",
+                      ? "scale-100 opacity-100 blur-0"
+                      : "scale-95 opacity-0 blur-sm",
                   )}
                 >
                   <Image
@@ -70,8 +70,8 @@ export function ProductsSection() {
                   className={cn(
                     "absolute inset-0 transition-all duration-500 ease-in-out",
                     activeCard === 1
-                      ? "opacity-100 scale-100 blur-0"
-                      : "opacity-0 scale-95 blur-sm",
+                      ? "scale-100 opacity-100 blur-0"
+                      : "scale-95 opacity-0 blur-sm",
                   )}
                 >
                   <Image
@@ -86,8 +86,8 @@ export function ProductsSection() {
                   className={cn(
                     "absolute inset-0 transition-all duration-500 ease-in-out",
                     activeCard === 2
-                      ? "opacity-100 scale-100 blur-0"
-                      : "opacity-0 scale-95 blur-sm",
+                      ? "scale-100 opacity-100 blur-0"
+                      : "scale-95 opacity-0 blur-sm",
                   )}
                 >
                   <Image
@@ -103,20 +103,20 @@ export function ProductsSection() {
         </div>
       </div>
 
-      <div className="self-stretch border-t border-border/70 border-b flex justify-center items-start">
-        <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
-          <div className="w-[120px] sm:w-[140px] md:w-[162px] left-[-40px] sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+      <div className="flex items-start justify-center self-stretch border-border/70 border-t border-b">
+        <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
+          <div className="absolute top-[-120px] left-[-40px] flex w-[120px] flex-col items-start justify-start sm:left-[-50px] sm:w-[140px] md:left-[-58px] md:w-[162px]">
             {Array.from({ length: 50 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px]"
+                className="-rotate-45 h-3 origin-top-left self-stretch outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px] sm:h-4"
               />
             ))}
           </div>
         </div>
 
-        <div className="flex-1 px-0 sm:px-2 md:px-0 flex flex-col md:flex-row justify-center items-stretch gap-0">
+        <div className="flex flex-1 flex-col items-stretch justify-center gap-0 px-0 sm:px-2 md:flex-row md:px-0">
           <FeatureCard
             title="Plan your schedules"
             description="Streamline customer subscriptions and billing with automated scheduling tools."
@@ -140,13 +140,13 @@ export function ProductsSection() {
           />
         </div>
 
-        <div className="w-4 sm:w-6 md:w-8 lg:w-12 self-stretch relative overflow-hidden">
-          <div className="w-[120px] sm:w-[140px] md:w-[162px] -left-10 sm:left-[-50px] md:left-[-58px] top-[-120px] absolute flex flex-col justify-start items-start">
+        <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
+          <div className="-left-10 absolute top-[-120px] flex w-[120px] flex-col items-start justify-start sm:left-[-50px] sm:w-[140px] md:left-[-58px] md:w-[162px]">
             {Array.from({ length: 50 }).map((_, i) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
                 key={i}
-                className="self-stretch h-3 sm:h-4 -rotate-45 origin-top-left outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px]"
+                className="-rotate-45 h-3 origin-top-left self-stretch outline-[0.5px] outline-foreground/10 outline-offset-[-0.25px] sm:h-4"
               />
             ))}
           </div>

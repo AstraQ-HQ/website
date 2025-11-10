@@ -1,19 +1,20 @@
 import type { CollectionConfig } from "payload";
+import { slugField } from "payload";
 import { env } from "@/env";
 
 export const Blog: CollectionConfig = {
   slug: "blog",
+  versions: {
+    drafts: true,
+  },
   access: {
     read: () => true,
   },
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "publishedAt"],
-    preview: ({ slug }) => `${env.NEXT_PUBLIC_SITE_URL}/blog/${slug}`,
     livePreview: {
-      url({ data }) {
-        return `${env.NEXT_PUBLIC_SITE_URL}/blog/${data.slug}/preview`;
-      },
+      url: ({ data }) => `${env.NEXT_PUBLIC_SITE_URL}/blog/${data.slug}/preview`,
     },
   },
   fields: [
@@ -22,14 +23,24 @@ export const Blog: CollectionConfig = {
       type: "text",
       required: true,
     },
+    slugField({
+      fieldToUse: "title",
+      overrides(field) {
+        if (field.admin?.position) {
+          field.admin.position = undefined;
+        }
+        return field;
+      },
+    }),
     {
       name: "shortDescription",
       type: "textarea",
     },
     {
-      name: "content",
-      type: "richText",
-      required: true,
+      name: "author",
+      type: "relationship",
+      relationTo: "users",
+      hasMany: false,
     },
     {
       name: "thumbnailImage",
@@ -47,10 +58,27 @@ export const Blog: CollectionConfig = {
       },
     },
     {
-      name: "author",
-      type: "relationship",
-      relationTo: "users",
-      hasMany: false,
+      name: "category",
+      type: "select",
+      options: [
+        {
+          label: "Blog Post",
+          value: "blog-post",
+        },
+        {
+          label: "Case Study",
+          value: "case-study",
+        },
+        {
+          label: "Success Story",
+          value: "success-story",
+        },
+      ],
+    },
+    {
+      name: "content",
+      type: "richText",
+      required: true,
     },
   ],
 };

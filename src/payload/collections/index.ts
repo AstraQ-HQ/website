@@ -1,6 +1,7 @@
 import { Blog } from "./blog";
+import { LegalPages } from "./legal-pages";
 import { Media } from "./media";
-import { Projects } from "./projects";
+import { Products } from "./products";
 import { Users } from "./users";
 
-export const collections = [Users, Media, Blog, Projects];
+export const collections = [Users, Media, Blog, Products, LegalPages];

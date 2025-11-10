@@ -14,31 +14,31 @@ type FAQSectionProps = {
 
 export function FAQSection({ siteInfo }: FAQSectionProps) {
   return (
-    <div className="w-full flex justify-center items-start">
-      <div className="flex-1 px-4 md:px-12 py-16 md:py-20 flex flex-col lg:flex-row justify-start items-start gap-6 lg:gap-12">
-        <div className="w-full lg:flex-1 flex flex-col justify-center items-start gap-4 lg:py-5">
-          <div className="w-full flex flex-col justify-center text-secondary-foreground font-semibold leading-tight md:leading-[44px] font-sans text-4xl tracking-tight">
+    <div className="flex w-full items-start justify-center">
+      <div className="flex flex-1 flex-col items-start justify-start gap-6 px-4 py-16 md:px-12 md:py-20 lg:flex-row lg:gap-12">
+        <div className="flex w-full flex-col items-start justify-center gap-4 lg:flex-1 lg:py-5">
+          <div className="flex w-full flex-col justify-center font-sans font-semibold text-4xl text-secondary-foreground leading-tight tracking-tight md:leading-[44px]">
             {siteInfo.faq.title}
           </div>
-          <div className="w-full text-muted-foreground text-base font-normal leading-7 font-sans">
+          <div className="w-full font-normal font-sans text-base text-muted-foreground leading-7">
             {siteInfo.faq.description}
           </div>
         </div>
 
-        <div className="w-full lg:flex-1 flex flex-col justify-center items-center">
+        <div className="flex w-full flex-col items-center justify-center lg:flex-1">
           <Accordion type="multiple" className="w-full">
             {siteInfo.faq.faqItems.map((item) => (
               <AccordionItem
                 key={item.question}
                 value={item.question}
-                className="border-b border-foreground/20"
+                className="border-foreground/20 border-b"
               >
-                <AccordionTrigger className="px-5 py-[18px] hover:bg-foreground/5 transition-colors duration-200 hover:no-underline [&>svg]:size-6 [&>svg]:text-foreground/60">
-                  <div className="flex-1 text-secondary-foreground text-base font-medium leading-6 font-sans text-left">
+                <AccordionTrigger className="px-5 py-[18px] transition-colors duration-200 hover:bg-foreground/5 hover:no-underline [&>svg]:size-6 [&>svg]:text-foreground/60">
+                  <div className="flex-1 text-left font-medium font-sans text-base text-secondary-foreground leading-6">
                     {item.question}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-5 pb-[18px] text-muted-foreground text-sm font-normal leading-6 font-sans">
+                <AccordionContent className="px-5 pb-[18px] font-normal font-sans text-muted-foreground text-sm leading-6">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>

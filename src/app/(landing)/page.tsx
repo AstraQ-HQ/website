@@ -1,6 +1,9 @@
 import config from "@payload-config";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { getPayload } from "payload";
+import type { Graph, Organization, WebSite } from "schema-dts";
+import { env } from "@/env";
 import { Footer } from "./_components/layout/footer";
 import { Header } from "./_components/layout/header";
 import { BackedBySection } from "./_components/sections/backed-by";
@@ -30,6 +33,65 @@ export default async function Page() {
     payload.findGlobal({ slug: "siteInfo" }),
   ]);
 
+  const organizationSchema: Organization = {
+    "@type": "Organization",
+    name: company.name,
+    description: company.description,
+    url: company.website ?? env.NEXT_PUBLIC_SITE_URL,
+    ...(company.email && {
+      email: company.email,
+    }),
+    ...(company.phone && {
+      telephone: company.phone,
+    }),
+    ...(company.logo &&
+      typeof company.logo !== "number" &&
+      company.logo.url && {
+        logo: company.logo.url,
+      }),
+    ...(company.address && {
+      address: {
+        "@type": "PostalAddress",
+        ...(company.address.line1 && { streetAddress: company.address.line1 }),
+        ...(company.address.line2 && { addressLine2: company.address.line2 }),
+        ...(company.address.city && { addressLocality: company.address.city }),
+        ...(company.address.state && { addressRegion: company.address.state }),
+        ...(company.address.postalCode && {
+          postalCode: company.address.postalCode,
+        }),
+        ...(company.address.country && {
+          addressCountry: company.address.country,
+        }),
+      },
+    }),
+    ...(company.social && {
+      sameAs: [
+        company.social.facebook,
+        company.social.twitter,
+        company.social.linkedin,
+        company.social.instagram,
+        company.social.github,
+        company.social.youtube,
+      ].filter((url): url is string => Boolean(url)),
+    }),
+  };
+
+  const websiteSchema: WebSite = {
+    "@type": "WebSite",
+    name: siteInfo.title,
+    description: siteInfo.subtitle,
+    url: env.NEXT_PUBLIC_SITE_URL,
+    publisher: {
+      "@type": "Organization",
+      name: company.name,
+    },
+  };
+
+  const graphSchema: Graph = {
+    "@context": "https://schema.org",
+    "@graph": [organizationSchema, websiteSchema],
+  };
+
   return (
     <div className="w-full min-h-screen relative overflow-x-hidden flex flex-col justify-start items-center">
       <div className="relative flex flex-col justify-start items-center w-full">
@@ -53,6 +115,14 @@ export default async function Page() {
           </div>
         </div>
       </div>
+
+      <Script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(graphSchema),
+        }}
+      />
     </div>
   );
 }

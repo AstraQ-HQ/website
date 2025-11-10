@@ -46,6 +46,7 @@ export const users = sqliteTable(
   "users",
   {
     id: integer("id").primaryKey(),
+    displayName: text("display_name").notNull().default("Unknown User"),
     updatedAt: text("updated_at")
       .notNull()
       .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
@@ -104,35 +105,109 @@ export const blog = sqliteTable(
   "blog",
   {
     id: integer("id").primaryKey(),
-    title: text("title").notNull(),
+    title: text("title"),
+    generateSlug: integer("generate_slug", { mode: "boolean" }).default(true),
+    slug: text("slug"),
     shortDescription: text("short_description"),
-    content: text("content", { mode: "json" }).notNull(),
+    author: integer("author_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
     thumbnailImage: integer("thumbnail_image_id").references(() => media.id, {
       onDelete: "set null",
     }),
     publishedAt: text("published_at").default(
       sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
     ),
-    author: integer("author_id").references(() => users.id, {
-      onDelete: "set null",
+    category: text("category", {
+      enum: ["blog-post", "case-study", "success-story"],
     }),
+    content: text("content", { mode: "json" }),
     updatedAt: text("updated_at")
       .notNull()
       .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
     createdAt: text("created_at")
       .notNull()
       .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    _status: text("_status", { enum: ["draft", "published"] }).default("draft"),
   },
   (columns) => [
-    index("blog_thumbnail_image_idx").on(columns.thumbnailImage),
+    uniqueIndex("blog_slug_idx").on(columns.slug),
     index("blog_author_idx").on(columns.author),
+    index("blog_thumbnail_image_idx").on(columns.thumbnailImage),
     index("blog_updated_at_idx").on(columns.updatedAt),
     index("blog_created_at_idx").on(columns.createdAt),
+    index("blog__status_idx").on(columns._status),
   ],
 );
 
-export const projects_images = sqliteTable(
-  "projects_images",
+export const _blog_v = sqliteTable(
+  "_blog_v",
+  {
+    id: integer("id").primaryKey(),
+    parent: integer("parent_id").references(() => blog.id, {
+      onDelete: "set null",
+    }),
+    version_title: text("version_title"),
+    version_generateSlug: integer("version_generate_slug", {
+      mode: "boolean",
+    }).default(true),
+    version_slug: text("version_slug"),
+    version_shortDescription: text("version_short_description"),
+    version_author: integer("version_author_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    version_thumbnailImage: integer("version_thumbnail_image_id").references(
+      () => media.id,
+      {
+        onDelete: "set null",
+      },
+    ),
+    version_publishedAt: text("version_published_at").default(
+      sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+    ),
+    version_category: text("version_category", {
+      enum: ["blog-post", "case-study", "success-story"],
+    }),
+    version_content: text("version_content", { mode: "json" }),
+    version_updatedAt: text("version_updated_at").default(
+      sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+    ),
+    version_createdAt: text("version_created_at").default(
+      sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+    ),
+    version__status: text("version__status", {
+      enum: ["draft", "published"],
+    }).default("draft"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    latest: integer("latest", { mode: "boolean" }),
+  },
+  (columns) => [
+    index("_blog_v_parent_idx").on(columns.parent),
+    index("_blog_v_version_version_slug_idx").on(columns.version_slug),
+    index("_blog_v_version_version_author_idx").on(columns.version_author),
+    index("_blog_v_version_version_thumbnail_image_idx").on(
+      columns.version_thumbnailImage,
+    ),
+    index("_blog_v_version_version_updated_at_idx").on(
+      columns.version_updatedAt,
+    ),
+    index("_blog_v_version_version_created_at_idx").on(
+      columns.version_createdAt,
+    ),
+    index("_blog_v_version_version__status_idx").on(columns.version__status),
+    index("_blog_v_created_at_idx").on(columns.createdAt),
+    index("_blog_v_updated_at_idx").on(columns.updatedAt),
+    index("_blog_v_latest_idx").on(columns.latest),
+  ],
+);
+
+export const products_images = sqliteTable(
+  "products_images",
   {
     _order: integer("_order").notNull(),
     _parentID: integer("_parent_id").notNull(),
@@ -142,22 +217,24 @@ export const projects_images = sqliteTable(
     }),
   },
   (columns) => [
-    index("projects_images_order_idx").on(columns._order),
-    index("projects_images_parent_id_idx").on(columns._parentID),
-    index("projects_images_image_idx").on(columns.image),
+    index("products_images_order_idx").on(columns._order),
+    index("products_images_parent_id_idx").on(columns._parentID),
+    index("products_images_image_idx").on(columns.image),
     foreignKey({
       columns: [columns["_parentID"]],
-      foreignColumns: [projects.id],
-      name: "projects_images_parent_id_fk",
+      foreignColumns: [products.id],
+      name: "products_images_parent_id_fk",
     }).onDelete("cascade"),
   ],
 );
 
-export const projects = sqliteTable(
-  "projects",
+export const products = sqliteTable(
+  "products",
   {
     id: integer("id").primaryKey(),
     title: text("title").notNull(),
+    generateSlug: integer("generate_slug", { mode: "boolean" }).default(true),
+    slug: text("slug").notNull(),
     description: text("description"),
     thumbnailImage: integer("thumbnail_image_id").references(() => media.id, {
       onDelete: "set null",
@@ -174,9 +251,32 @@ export const projects = sqliteTable(
       .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
   },
   (columns) => [
-    index("projects_thumbnail_image_idx").on(columns.thumbnailImage),
-    index("projects_updated_at_idx").on(columns.updatedAt),
-    index("projects_created_at_idx").on(columns.createdAt),
+    uniqueIndex("products_slug_idx").on(columns.slug),
+    index("products_thumbnail_image_idx").on(columns.thumbnailImage),
+    index("products_updated_at_idx").on(columns.updatedAt),
+    index("products_created_at_idx").on(columns.createdAt),
+  ],
+);
+
+export const legal_pages = sqliteTable(
+  "legal_pages",
+  {
+    id: integer("id").primaryKey(),
+    title: text("title").notNull(),
+    generateSlug: integer("generate_slug", { mode: "boolean" }).default(true),
+    slug: text("slug").notNull(),
+    content: text("content", { mode: "json" }).notNull(),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+  },
+  (columns) => [
+    uniqueIndex("legal_pages_slug_idx").on(columns.slug),
+    index("legal_pages_updated_at_idx").on(columns.updatedAt),
+    index("legal_pages_created_at_idx").on(columns.createdAt),
   ],
 );
 
@@ -219,7 +319,8 @@ export const payload_locked_documents_rels = sqliteTable(
     usersID: integer("users_id"),
     mediaID: integer("media_id"),
     blogID: integer("blog_id"),
-    projectsID: integer("projects_id"),
+    productsID: integer("products_id"),
+    "legal-pagesID": integer("legal_pages_id"),
   },
   (columns) => [
     index("payload_locked_documents_rels_order_idx").on(columns.order),
@@ -228,8 +329,11 @@ export const payload_locked_documents_rels = sqliteTable(
     index("payload_locked_documents_rels_users_id_idx").on(columns.usersID),
     index("payload_locked_documents_rels_media_id_idx").on(columns.mediaID),
     index("payload_locked_documents_rels_blog_id_idx").on(columns.blogID),
-    index("payload_locked_documents_rels_projects_id_idx").on(
-      columns.projectsID,
+    index("payload_locked_documents_rels_products_id_idx").on(
+      columns.productsID,
+    ),
+    index("payload_locked_documents_rels_legal_pages_id_idx").on(
+      columns["legal-pagesID"],
     ),
     foreignKey({
       columns: [columns["parent"]],
@@ -252,9 +356,14 @@ export const payload_locked_documents_rels = sqliteTable(
       name: "payload_locked_documents_rels_blog_fk",
     }).onDelete("cascade"),
     foreignKey({
-      columns: [columns["projectsID"]],
-      foreignColumns: [projects.id],
-      name: "payload_locked_documents_rels_projects_fk",
+      columns: [columns["productsID"]],
+      foreignColumns: [products.id],
+      name: "payload_locked_documents_rels_products_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [columns["legal-pagesID"]],
+      foreignColumns: [legal_pages.id],
+      name: "payload_locked_documents_rels_legal_pages_fk",
     }).onDelete("cascade"),
   ],
 );
@@ -439,19 +548,6 @@ export const header = sqliteTable("header", {
   ),
 });
 
-export const legal_pages = sqliteTable("legal_pages", {
-  id: integer("id").primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull(),
-  content: text("content", { mode: "json" }).notNull(),
-  updatedAt: text("updated_at").default(
-    sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
-  ),
-  createdAt: text("created_at").default(
-    sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
-  ),
-});
-
 export const site_info_backed_by_backers = sqliteTable(
   "site_info_backed_by_backers",
   {
@@ -528,6 +624,7 @@ export const site_info = sqliteTable("site_info", {
   id: integer("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
+  contactUsUrl: text("contact_us_url").notNull(),
   backedBy_title: text("backed_by_title").notNull(),
   backedBy_description: text("backed_by_description").notNull(),
   services_title: text("services_title").notNull(),
@@ -559,42 +656,60 @@ export const relations_users = relations(users, ({ many }) => ({
 }));
 export const relations_media = relations(media, () => ({}));
 export const relations_blog = relations(blog, ({ one }) => ({
-  thumbnailImage: one(media, {
-    fields: [blog.thumbnailImage],
-    references: [media.id],
-    relationName: "thumbnailImage",
-  }),
   author: one(users, {
     fields: [blog.author],
     references: [users.id],
     relationName: "author",
   }),
+  thumbnailImage: one(media, {
+    fields: [blog.thumbnailImage],
+    references: [media.id],
+    relationName: "thumbnailImage",
+  }),
 }));
-export const relations_projects_images = relations(
-  projects_images,
+export const relations__blog_v = relations(_blog_v, ({ one }) => ({
+  parent: one(blog, {
+    fields: [_blog_v.parent],
+    references: [blog.id],
+    relationName: "parent",
+  }),
+  version_author: one(users, {
+    fields: [_blog_v.version_author],
+    references: [users.id],
+    relationName: "version_author",
+  }),
+  version_thumbnailImage: one(media, {
+    fields: [_blog_v.version_thumbnailImage],
+    references: [media.id],
+    relationName: "version_thumbnailImage",
+  }),
+}));
+export const relations_products_images = relations(
+  products_images,
   ({ one }) => ({
-    _parentID: one(projects, {
-      fields: [projects_images._parentID],
-      references: [projects.id],
+    _parentID: one(products, {
+      fields: [products_images._parentID],
+      references: [products.id],
       relationName: "images",
     }),
     image: one(media, {
-      fields: [projects_images.image],
+      fields: [products_images.image],
       references: [media.id],
       relationName: "image",
     }),
   }),
 );
-export const relations_projects = relations(projects, ({ one, many }) => ({
+export const relations_products = relations(products, ({ one, many }) => ({
   thumbnailImage: one(media, {
-    fields: [projects.thumbnailImage],
+    fields: [products.thumbnailImage],
     references: [media.id],
     relationName: "thumbnailImage",
   }),
-  images: many(projects_images, {
+  images: many(products_images, {
     relationName: "images",
   }),
 }));
+export const relations_legal_pages = relations(legal_pages, () => ({}));
 export const relations_payload_kv = relations(payload_kv, () => ({}));
 export const relations_payload_locked_documents_rels = relations(
   payload_locked_documents_rels,
@@ -619,10 +734,15 @@ export const relations_payload_locked_documents_rels = relations(
       references: [blog.id],
       relationName: "blog",
     }),
-    projectsID: one(projects, {
-      fields: [payload_locked_documents_rels.projectsID],
-      references: [projects.id],
-      relationName: "projects",
+    productsID: one(products, {
+      fields: [payload_locked_documents_rels.productsID],
+      references: [products.id],
+      relationName: "products",
+    }),
+    "legal-pagesID": one(legal_pages, {
+      fields: [payload_locked_documents_rels["legal-pagesID"]],
+      references: [legal_pages.id],
+      relationName: "legal-pages",
     }),
   }),
 );
@@ -708,7 +828,6 @@ export const relations_header = relations(header, ({ many }) => ({
     relationName: "links",
   }),
 }));
-export const relations_legal_pages = relations(legal_pages, () => ({}));
 export const relations_site_info_backed_by_backers = relations(
   site_info_backed_by_backers,
   ({ one }) => ({
@@ -766,8 +885,10 @@ type DatabaseSchema = {
   users: typeof users;
   media: typeof media;
   blog: typeof blog;
-  projects_images: typeof projects_images;
-  projects: typeof projects;
+  _blog_v: typeof _blog_v;
+  products_images: typeof products_images;
+  products: typeof products;
+  legal_pages: typeof legal_pages;
   payload_kv: typeof payload_kv;
   payload_locked_documents: typeof payload_locked_documents;
   payload_locked_documents_rels: typeof payload_locked_documents_rels;
@@ -780,7 +901,6 @@ type DatabaseSchema = {
   footer: typeof footer;
   header_links: typeof header_links;
   header: typeof header;
-  legal_pages: typeof legal_pages;
   site_info_backed_by_backers: typeof site_info_backed_by_backers;
   site_info_services_services: typeof site_info_services_services;
   site_info_faq_faq_items: typeof site_info_faq_faq_items;
@@ -789,8 +909,10 @@ type DatabaseSchema = {
   relations_users: typeof relations_users;
   relations_media: typeof relations_media;
   relations_blog: typeof relations_blog;
-  relations_projects_images: typeof relations_projects_images;
-  relations_projects: typeof relations_projects;
+  relations__blog_v: typeof relations__blog_v;
+  relations_products_images: typeof relations_products_images;
+  relations_products: typeof relations_products;
+  relations_legal_pages: typeof relations_legal_pages;
   relations_payload_kv: typeof relations_payload_kv;
   relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels;
   relations_payload_locked_documents: typeof relations_payload_locked_documents;
@@ -803,7 +925,6 @@ type DatabaseSchema = {
   relations_footer: typeof relations_footer;
   relations_header_links: typeof relations_header_links;
   relations_header: typeof relations_header;
-  relations_legal_pages: typeof relations_legal_pages;
   relations_site_info_backed_by_backers: typeof relations_site_info_backed_by_backers;
   relations_site_info_services_services: typeof relations_site_info_services_services;
   relations_site_info_faq_faq_items: typeof relations_site_info_faq_faq_items;
