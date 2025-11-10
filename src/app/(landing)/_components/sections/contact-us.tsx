@@ -58,7 +58,7 @@ export function ContactUsSection() {
           </div>
         </div>
 
-        <div className="relative z-20 flex w-full items-center justify-center gap-6 overflow-hidden rounded-lg px-6 py-5 md:py-8">
+        <div className="relative z-20 flex flex-col md:flex-row w-full items-center justify-center gap-6 overflow-hidden rounded-lg px-6 py-5 md:py-8">
           <div className="flex flex-col items-start justify-start gap-3 self-stretch">
             <div className="flex flex-col justify-center self-stretch font-sans font-semibold text-3xl text-secondary-foreground leading-tight tracking-tight md:text-5xl md:leading-[56px]">
               Get in touch
@@ -163,7 +163,7 @@ export function ContactUsSection() {
                   type="submit"
                   disabled={isSubmitting}
                   variant="default"
-                  className="relative h-10 overflow-hidden rounded-full px-12 py-[6px] shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset]"
+                  className="relative h-10 overflow-hidden rounded-full px-12 py-[6px] shadow-[0px_0px_0px_2.5px_rgba(255,255,255,0.08)_inset] w-full md:w-auto"
                 >
                   <div className="absolute top-0 left-0 h-[41px] w-44 bg-linear-to-b from-[rgba(255,255,255,0)] to-[rgba(0,0,0,0.10)] mix-blend-multiply" />
                   <div className="relative z-10 flex flex-col justify-center font-medium font-sans text-[13px] text-primary-foreground leading-5">

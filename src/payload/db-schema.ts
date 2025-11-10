@@ -46,7 +46,7 @@ export const users = sqliteTable(
   "users",
   {
     id: integer("id").primaryKey(),
-    displayName: text("display_name").notNull().default("Unknown User"),
+    displayName: text("display_name").notNull(),
     updatedAt: text("updated_at")
       .notNull()
       .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),

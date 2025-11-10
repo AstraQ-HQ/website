@@ -11,7 +11,6 @@ export const Users: CollectionConfig = {
       name: "displayName",
       type: "text",
       required: true,
-      defaultValue: "Unknown User",
     },
   ],
 };
