@@ -144,6 +144,7 @@ export const revalidateProduct: CollectionAfterChangeHook = async ({ doc, previo
     paths.push({ path: `/products/${slug}` });
   }
 
+  paths.push({ path: "/products" });
   paths.push({ path: "/" });
 
   if (previousDoc?.slug && previousDoc.slug !== slug) {
@@ -172,6 +173,7 @@ export const revalidateProductDelete: CollectionAfterDeleteHook = async ({ doc, 
     paths.push({ path: `/products/${slug}` });
   }
 
+  paths.push({ path: "/products" });
   paths.push({ path: "/" });
 
   try {
@@ -181,6 +183,60 @@ export const revalidateProductDelete: CollectionAfterDeleteHook = async ({ doc, 
     );
   } catch (error) {
     req.payload.logger.error(`Failed to revalidate product paths: ${error}`);
+  }
+
+  return doc;
+};
+
+export const revalidateService: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
+  if (req.context?.disableRevalidate) {
+    return doc;
+  }
+
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
+  const slug = doc.slug as string | undefined;
+  if (slug) {
+    paths.push({ path: `/services/${slug}` });
+  }
+
+  paths.push({ path: "/services" });
+
+  if (previousDoc?.slug && previousDoc.slug !== slug) {
+    paths.push({ path: `/services/${previousDoc.slug}` });
+  }
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(`Revalidated service paths: ${paths.map((p) => p.path).join(", ")}`);
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate service paths: ${error}`);
+  }
+
+  return doc;
+};
+
+export const revalidateServiceDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
+  if (req.context?.disableRevalidate) {
+    return doc;
+  }
+
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
+  const slug = doc?.slug as string | undefined;
+  if (slug) {
+    paths.push({ path: `/services/${slug}` });
+  }
+
+  paths.push({ path: "/services" });
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(
+      `Revalidated service paths after delete: ${paths.map((p) => p.path).join(", ")}`,
+    );
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate service paths: ${error}`);
   }
 
   return doc;

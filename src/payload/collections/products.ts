@@ -21,7 +21,7 @@ export const Products: CollectionConfig = {
     },
     {
       name: "thumbnailImage",
-      type: "relationship",
+      type: "upload",
       relationTo: "media",
       hasMany: false,
     },
@@ -45,7 +45,7 @@ export const Products: CollectionConfig = {
       fields: [
         {
           name: "image",
-          type: "relationship",
+          type: "upload",
           relationTo: "media",
           hasMany: false,
         },

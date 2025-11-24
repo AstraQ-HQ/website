@@ -46,7 +46,7 @@ export const SiteInfo: GlobalConfig = {
           fields: [
             {
               name: "logo",
-              type: "relationship",
+              type: "upload",
               relationTo: "media",
               hasMany: false,
               required: true,
@@ -98,7 +98,7 @@ export const SiteInfo: GlobalConfig = {
             },
             {
               name: "illustration",
-              type: "relationship",
+              type: "upload",
               relationTo: "media",
               hasMany: false,
             },

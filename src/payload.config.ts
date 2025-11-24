@@ -1,7 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
-import { integer, sqliteTable } from "@payloadcms/db-sqlite/drizzle/sqlite-core";
 import {
   FixedToolbarFeature,
   lexicalEditor,

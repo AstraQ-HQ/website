@@ -19,7 +19,7 @@ export const Company: GlobalConfig = {
     },
     {
       name: "logo",
-      type: "relationship",
+      type: "upload",
       relationTo: "media",
       hasMany: false,
     },

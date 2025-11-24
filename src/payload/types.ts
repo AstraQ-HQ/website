@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     blog: Blog;
     products: Product;
+    services: Service;
     'legal-pages': LegalPage;
     submissions: Submission;
     'payload-kv': PayloadKv;
@@ -84,6 +85,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -241,6 +243,24 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  description?: string | null;
+  illustration?: (number | null) | Media;
+  products?: (number | Product)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "legal-pages".
  */
 export interface LegalPage {
@@ -321,6 +341,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
       } | null)
     | ({
         relationTo: 'legal-pages';
@@ -450,6 +474,20 @@ export interface ProductsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  description?: T;
+  illustration?: T;
+  products?: T;
   updatedAt?: T;
   createdAt?: T;
 }

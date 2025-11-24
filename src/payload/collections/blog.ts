@@ -49,7 +49,7 @@ export const Blog: CollectionConfig = {
     },
     {
       name: "thumbnailImage",
-      type: "relationship",
+      type: "upload",
       relationTo: "media",
       hasMany: false,
     },

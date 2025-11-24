@@ -258,6 +258,59 @@ export const products = sqliteTable(
   ],
 );
 
+export const services = sqliteTable(
+  "services",
+  {
+    id: integer("id").primaryKey(),
+    title: text("title").notNull(),
+    generateSlug: integer("generate_slug", { mode: "boolean" }).default(true),
+    slug: text("slug").notNull(),
+    description: text("description"),
+    illustration: integer("illustration_id").references(() => media.id, {
+      onDelete: "set null",
+    }),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+  },
+  (columns) => [
+    uniqueIndex("services_slug_idx").on(columns.slug),
+    index("services_illustration_idx").on(columns.illustration),
+    index("services_updated_at_idx").on(columns.updatedAt),
+    index("services_created_at_idx").on(columns.createdAt),
+  ],
+);
+
+export const services_rels = sqliteTable(
+  "services_rels",
+  {
+    id: integer("id").primaryKey(),
+    order: integer("order"),
+    parent: integer("parent_id").notNull(),
+    path: text("path").notNull(),
+    productsID: integer("products_id"),
+  },
+  (columns) => [
+    index("services_rels_order_idx").on(columns.order),
+    index("services_rels_parent_idx").on(columns.parent),
+    index("services_rels_path_idx").on(columns.path),
+    index("services_rels_products_id_idx").on(columns.productsID),
+    foreignKey({
+      columns: [columns["parent"]],
+      foreignColumns: [services.id],
+      name: "services_rels_parent_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [columns["productsID"]],
+      foreignColumns: [products.id],
+      name: "services_rels_products_fk",
+    }).onDelete("cascade"),
+  ],
+);
+
 export const legal_pages = sqliteTable(
   "legal_pages",
   {
@@ -338,6 +391,7 @@ export const payload_locked_documents_rels = sqliteTable(
     mediaID: integer("media_id"),
     blogID: integer("blog_id"),
     productsID: integer("products_id"),
+    servicesID: integer("services_id"),
     "legal-pagesID": integer("legal_pages_id"),
     submissionsID: integer("submissions_id"),
   },
@@ -350,6 +404,9 @@ export const payload_locked_documents_rels = sqliteTable(
     index("payload_locked_documents_rels_blog_id_idx").on(columns.blogID),
     index("payload_locked_documents_rels_products_id_idx").on(
       columns.productsID,
+    ),
+    index("payload_locked_documents_rels_services_id_idx").on(
+      columns.servicesID,
     ),
     index("payload_locked_documents_rels_legal_pages_id_idx").on(
       columns["legal-pagesID"],
@@ -381,6 +438,11 @@ export const payload_locked_documents_rels = sqliteTable(
       columns: [columns["productsID"]],
       foreignColumns: [products.id],
       name: "payload_locked_documents_rels_products_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [columns["servicesID"]],
+      foreignColumns: [services.id],
+      name: "payload_locked_documents_rels_services_fk",
     }).onDelete("cascade"),
     foreignKey({
       columns: [columns["legal-pagesID"]],
@@ -736,6 +798,28 @@ export const relations_products = relations(products, ({ one, many }) => ({
     relationName: "images",
   }),
 }));
+export const relations_services_rels = relations(services_rels, ({ one }) => ({
+  parent: one(services, {
+    fields: [services_rels.parent],
+    references: [services.id],
+    relationName: "_rels",
+  }),
+  productsID: one(products, {
+    fields: [services_rels.productsID],
+    references: [products.id],
+    relationName: "products",
+  }),
+}));
+export const relations_services = relations(services, ({ one, many }) => ({
+  illustration: one(media, {
+    fields: [services.illustration],
+    references: [media.id],
+    relationName: "illustration",
+  }),
+  _rels: many(services_rels, {
+    relationName: "_rels",
+  }),
+}));
 export const relations_legal_pages = relations(legal_pages, () => ({}));
 export const relations_submissions = relations(submissions, () => ({}));
 export const relations_payload_kv = relations(payload_kv, () => ({}));
@@ -766,6 +850,11 @@ export const relations_payload_locked_documents_rels = relations(
       fields: [payload_locked_documents_rels.productsID],
       references: [products.id],
       relationName: "products",
+    }),
+    servicesID: one(services, {
+      fields: [payload_locked_documents_rels.servicesID],
+      references: [services.id],
+      relationName: "services",
     }),
     "legal-pagesID": one(legal_pages, {
       fields: [payload_locked_documents_rels["legal-pagesID"]],
@@ -921,6 +1010,8 @@ type DatabaseSchema = {
   _blog_v: typeof _blog_v;
   products_images: typeof products_images;
   products: typeof products;
+  services: typeof services;
+  services_rels: typeof services_rels;
   legal_pages: typeof legal_pages;
   submissions: typeof submissions;
   payload_kv: typeof payload_kv;
@@ -946,6 +1037,8 @@ type DatabaseSchema = {
   relations__blog_v: typeof relations__blog_v;
   relations_products_images: typeof relations_products_images;
   relations_products: typeof relations_products;
+  relations_services_rels: typeof relations_services_rels;
+  relations_services: typeof relations_services;
   relations_legal_pages: typeof relations_legal_pages;
   relations_submissions: typeof relations_submissions;
   relations_payload_kv: typeof relations_payload_kv;
