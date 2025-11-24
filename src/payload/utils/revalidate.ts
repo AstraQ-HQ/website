@@ -1,27 +1,56 @@
-import { revalidatePath } from "next/cache";
 import type {
   CollectionAfterChangeHook,
   CollectionAfterDeleteHook,
   GlobalAfterChangeHook,
 } from "payload";
+import { env } from "@/env";
+
+async function callRevalidateAPI(paths: Array<{ path: string; type?: "page" | "layout" }>) {
+  try {
+    const response = await fetch(`${env.NEXT_PUBLIC_SITE_URL}/api/revalidate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${env.PAYLOAD_SECRET}`,
+      },
+      body: JSON.stringify({ paths }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Revalidation failed: ${response.status} ${error}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error calling revalidation API:", error);
+    throw error;
+  }
+}
 
 export const revalidateBlog: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
   if (req.context?.disableRevalidate) {
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/blog/${slug}`);
-    req.payload.logger.info(`Revalidated blog post: /blog/${slug}`);
+    paths.push({ path: `/blog/${slug}` });
   }
 
-  revalidatePath("/blog");
-  req.payload.logger.info("Revalidated blog listing page: /blog");
+  paths.push({ path: "/blog" });
 
   if (previousDoc?.slug && previousDoc.slug !== slug) {
-    revalidatePath(`/blog/${previousDoc.slug}`);
-    req.payload.logger.info(`Revalidated old blog post path: /blog/${previousDoc.slug}`);
+    paths.push({ path: `/blog/${previousDoc.slug}` });
+  }
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(`Revalidated blog paths: ${paths.map((p) => p.path).join(", ")}`);
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate blog paths: ${error}`);
   }
 
   return doc;
@@ -32,14 +61,23 @@ export const revalidateBlogDelete: CollectionAfterDeleteHook = async ({ doc, req
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc?.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/blog/${slug}`);
-    req.payload.logger.info(`Revalidated deleted blog post: /blog/${slug}`);
+    paths.push({ path: `/blog/${slug}` });
   }
 
-  revalidatePath("/blog");
-  req.payload.logger.info("Revalidated blog listing page after delete: /blog");
+  paths.push({ path: "/blog" });
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(
+      `Revalidated blog paths after delete: ${paths.map((p) => p.path).join(", ")}`,
+    );
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate blog paths: ${error}`);
+  }
 
   return doc;
 };
@@ -49,15 +87,22 @@ export const revalidateLegalPage: CollectionAfterChangeHook = async ({ doc, prev
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/legal/${slug}`);
-    req.payload.logger.info(`Revalidated legal page: /legal/${slug}`);
+    paths.push({ path: `/legal/${slug}` });
   }
 
   if (previousDoc?.slug && previousDoc.slug !== slug) {
-    revalidatePath(`/legal/${previousDoc.slug}`);
-    req.payload.logger.info(`Revalidated old legal page path: /legal/${previousDoc.slug}`);
+    paths.push({ path: `/legal/${previousDoc.slug}` });
+  }
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(`Revalidated legal page paths: ${paths.map((p) => p.path).join(", ")}`);
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate legal page paths: ${error}`);
   }
 
   return doc;
@@ -68,10 +113,20 @@ export const revalidateLegalPageDelete: CollectionAfterDeleteHook = async ({ doc
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc?.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/legal/${slug}`);
-    req.payload.logger.info(`Revalidated deleted legal page: /legal/${slug}`);
+    paths.push({ path: `/legal/${slug}` });
+  }
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(
+      `Revalidated legal page paths after delete: ${paths.map((p) => p.path).join(", ")}`,
+    );
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate legal page paths: ${error}`);
   }
 
   return doc;
@@ -82,18 +137,24 @@ export const revalidateProduct: CollectionAfterChangeHook = async ({ doc, previo
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/products/${slug}`);
-    req.payload.logger.info(`Revalidated product: /products/${slug}`);
+    paths.push({ path: `/products/${slug}` });
   }
 
-  revalidatePath("/");
-  req.payload.logger.info("Revalidated homepage after product change");
+  paths.push({ path: "/" });
 
   if (previousDoc?.slug && previousDoc.slug !== slug) {
-    revalidatePath(`/products/${previousDoc.slug}`);
-    req.payload.logger.info(`Revalidated old product path: /products/${previousDoc.slug}`);
+    paths.push({ path: `/products/${previousDoc.slug}` });
+  }
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(`Revalidated product paths: ${paths.map((p) => p.path).join(", ")}`);
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate product paths: ${error}`);
   }
 
   return doc;
@@ -104,14 +165,23 @@ export const revalidateProductDelete: CollectionAfterDeleteHook = async ({ doc, 
     return doc;
   }
 
+  const paths: Array<{ path: string; type?: "page" | "layout" }> = [];
+
   const slug = doc?.slug as string | undefined;
   if (slug) {
-    revalidatePath(`/products/${slug}`);
-    req.payload.logger.info(`Revalidated deleted product: /products/${slug}`);
+    paths.push({ path: `/products/${slug}` });
   }
 
-  revalidatePath("/");
-  req.payload.logger.info("Revalidated homepage after product delete");
+  paths.push({ path: "/" });
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info(
+      `Revalidated product paths after delete: ${paths.map((p) => p.path).join(", ")}`,
+    );
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate product paths: ${error}`);
+  }
 
   return doc;
 };
@@ -121,8 +191,14 @@ export const revalidateSiteInfo: GlobalAfterChangeHook = async ({ doc, req }) =>
     return doc;
   }
 
-  revalidatePath("/", "page");
-  req.payload.logger.info("Revalidated homepage after siteInfo change");
+  const paths = [{ path: "/", type: "page" as const }];
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info("Revalidated homepage after siteInfo change");
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate siteInfo: ${error}`);
+  }
 
   return doc;
 };
@@ -132,8 +208,14 @@ export const revalidateHeader: GlobalAfterChangeHook = async ({ doc, req }) => {
     return doc;
   }
 
-  revalidatePath("/", "layout");
-  req.payload.logger.info("Revalidated layout after header change");
+  const paths = [{ path: "/", type: "layout" as const }];
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info("Revalidated layout after header change");
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate header: ${error}`);
+  }
 
   return doc;
 };
@@ -143,8 +225,14 @@ export const revalidateFooter: GlobalAfterChangeHook = async ({ doc, req }) => {
     return doc;
   }
 
-  revalidatePath("/", "layout");
-  req.payload.logger.info("Revalidated layout after footer change");
+  const paths = [{ path: "/", type: "layout" as const }];
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info("Revalidated layout after footer change");
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate footer: ${error}`);
+  }
 
   return doc;
 };
@@ -154,9 +242,17 @@ export const revalidateCompany: GlobalAfterChangeHook = async ({ doc, req }) => 
     return doc;
   }
 
-  revalidatePath("/", "page");
-  revalidatePath("/", "layout");
-  req.payload.logger.info("Revalidated homepage and layout after company change");
+  const paths = [
+    { path: "/", type: "page" as const },
+    { path: "/", type: "layout" as const },
+  ];
+
+  try {
+    await callRevalidateAPI(paths);
+    req.payload.logger.info("Revalidated homepage and layout after company change");
+  } catch (error) {
+    req.payload.logger.error(`Failed to revalidate company: ${error}`);
+  }
 
   return doc;
 };
