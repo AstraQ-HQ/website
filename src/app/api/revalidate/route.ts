@@ -4,9 +4,10 @@ import { env } from "@/env";
 
 export async function POST(request: Request) {
   try {
-    const authHeader = request.headers.get("authorization");
+    const authHeader = request.headers.get("Authorization");
+    console.log(authHeader);
 
-    if (authHeader !== `Bearer ${env.PAYLOAD_SECRET}`) {
+    if (authHeader !== `Bearer ${env.PAYLOAD_REVALIDATE_SECRET}`) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 

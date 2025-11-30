@@ -11,7 +11,7 @@ async function callRevalidateAPI(paths: Array<{ path: string; type?: "page" | "l
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${env.PAYLOAD_SECRET}`,
+        Authorization: `Bearer ${env.PAYLOAD_REVALIDATE_SECRET}`,
       },
       body: JSON.stringify({ paths }),
     });
