@@ -10,7 +10,6 @@ import { FAQSection } from "./_components/sections/faq";
 import { HeroSection } from "./_components/sections/hero";
 import { ProductsSection } from "./_components/sections/products";
 import { ServicesSection } from "./_components/sections/services";
-import { TestimonialsSection } from "./_components/sections/testimonials";
 
 export const revalidate = 7200;
 
@@ -97,7 +96,6 @@ export default async function Page() {
         <ProductsSection />
         <BackedBySection siteInfo={siteInfo} />
         <ServicesSection siteInfo={siteInfo} />
-        <TestimonialsSection />
         <FAQSection siteInfo={siteInfo} />
         <ContactUsSection />
       </div>
