@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { IconBadge } from "@/components/icon-badge";
-import { cn, getImageUrl } from "@/lib/utils";
+import { Marquee } from "@/components/ui/marquee";
+import { getImageUrl } from "@/lib/utils";
 import type { SiteInfo as SiteInfoType } from "@/payload/types";
 
 type BackedBySectionProps = {
@@ -65,7 +66,7 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
         </div>
       </div>
 
-      <div className="flex items-start justify-center self-stretch border-border border-t border-b-0">
+      <div className="flex items-start justify-center self-stretch border-border border-b-0">
         <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
           <div className="absolute top-[-120px] left-[-40px] flex w-[120px] flex-col items-start justify-start sm:left-[-50px] sm:w-[140px] md:left-[-58px] md:w-[162px]">
             {Array.from({ length: 50 }).map((_, i) => (
@@ -78,33 +79,14 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
           </div>
         </div>
 
-        <div className="grid flex-1 grid-cols-2 gap-0 border-border border-r border-l sm:grid-cols-4 md:grid-cols-4">
-          {siteInfo.backedBy.backers.map((backer, index) => {
-            const isMobileFirstColumn = index % 2 === 0;
-            const isDesktopFirstColumn = index % 4 === 0;
-            const isDesktopLastColumn = index % 4 === 3;
-            const isDesktopTopRow = index < 4;
-            const isDesktopBottomRow = index >= 4;
-
-            return (
+        <div className="flex-1 border-border border-r border-l">
+          <Marquee className="[--duration:20s] [--gap:24px] p-4 sm:p-6 md:p-8">
+            {siteInfo.backedBy.backers.map((backer) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: we don't need a key here
-                key={index}
-                className={cn(
-                  "flex h-24 xs:h-28 items-center justify-center gap-1 xs:gap-2 sm:h-32 sm:gap-3 md:h-36 lg:h-40",
-                  "border-border/60 border-b",
-                  index < 6 ? "sm:border-b-[0.5px]" : "sm:border-b",
-                  index >= 6 ? "border-b" : "",
-                  isMobileFirstColumn ? "border-r-[0.5px]" : "",
-                  "sm:border-r-[0.5px] sm:border-l-0",
-                  isDesktopFirstColumn ? "md:border-l" : "md:border-l-[0.5px]",
-                  isDesktopLastColumn ? "md:border-r" : "md:border-r-[0.5px]",
-                  isDesktopTopRow ? "md:border-b-[0.5px]" : "",
-                  isDesktopBottomRow ? "md:border-t-[0.5px] md:border-b" : "",
-                  "border-border/60",
-                )}
+                key={backer.id ?? backer.name}
+                className="flex h-12 xs:h-14 items-center justify-center gap-1 xs:gap-2 sm:h-16 sm:gap-3 md:h-18 lg:h-20 px-4 xs:px-6 sm:px-8 md:px-12 bg-muted/30 rounded-lg shadow-sm"
               >
-                <div className="relative h-6 xs:h-7 w-6 xs:w-7 overflow-hidden rounded-full shadow-[0px_-4px_8px_rgba(255,255,255,0.64)_inset] sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10">
+                <div className="relative h-6 xs:h-7 w-6 xs:w-7 overflow-hidden rounded-full sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10">
                   <Image
                     src={getImageUrl(backer.logo) ?? ""}
                     alt={backer.name}
@@ -117,8 +99,8 @@ export function BackedBySection({ siteInfo }: BackedBySectionProps) {
                   {backer.name}
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </Marquee>
         </div>
 
         <div className="relative w-4 self-stretch overflow-hidden sm:w-6 md:w-8 lg:w-12">
